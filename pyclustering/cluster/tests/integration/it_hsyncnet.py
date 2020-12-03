@@ -52,6 +52,9 @@ class HsyncnetIntegrationTest(unittest.TestCase):
         HsyncnetTestTemplates.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, False, True);
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, 5, 0.3, False, True);
+    def runRemovedLibraryCoreTest(self):
+        HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, 5, 0.3, False, True)

@@ -10,6 +10,7 @@
 
 
 import sys
+import warnings
 
 from ctypes import *
 
@@ -17,7 +18,7 @@ from pyclustering.core.definitions import *
 
 
 ccore_library_instance = None
-ccore_library_version = "0.10.1.2"
+ccore_library_version = "0.11.0"
 
 
 class ccore_library:
@@ -46,34 +47,34 @@ class ccore_library:
         ccore_library.__initialized = True
         
         if PATH_PYCLUSTERING_CCORE_LIBRARY is None:
-            print("The pyclustering ccore is not supported for platform '" + sys.platform + "' (" + platform.architecture()[0] + ").\n" + 
-                  "Falling back on python implementation.\n" +
-                  "For more information, contact 'pyclustering@yandex.ru'.")
+            warnings.warn("The C/C++ pyclustering is not supported for platform '" + sys.platform + "' (" + platform.architecture()[0] + ").\n" +
+                          "Falling back on python implementation.\n" +
+                          "For more information, contact 'pyclustering@yandex.ru'.", ResourceWarning)
             
             return None
     
         if os.path.exists(PATH_PYCLUSTERING_CCORE_LIBRARY) is False:
-            print("The pyclustering ccore is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "').\n" + 
-                  "Probably library has not been successfully installed ('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" + 
-                  "Falling back on python implementation.\n" +
-                  "For more information, contact 'pyclustering@yandex.ru'.")
+            warnings.warn("The C/C++ pyclustering is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "').\n" +
+                          "Probably library has not been successfully installed ('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" +
+                          "Falling back on python implementation.\n" +
+                          "For more information, contact 'pyclustering@yandex.ru'.", ResourceWarning)
             
             return None
 
         ccore_library.__library = cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY)
         if ccore_library.__check_library_integrity() is False:
-            print("Impossible to mark ccore as workable due to compatibility issues " +
-                  "('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" + 
-                  "Falling back on python implementation.\n" +
-                  "For more information, contact 'pyclustering@yandex.ru'.")
+            warnings.warn("Impossible to mark C/C++ pyclustering library as a workable due to compatibility issues " +
+                          "('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" +
+                          "Falling back on python implementation.\n" +
+                          "For more information, contact 'pyclustering@yandex.ru'.", ResourceWarning)
             
             return None
 
         result, version = ccore_library.__check_library_version()
         if result is False:
-            print("Incompatible ccore version of pyclustering library is being used ('" + version +"' instead '" + ccore_library_version + "').\n" +
-                  "Probably library has not been successfully installed.\n" +
-                  "Please, contact 'pyclustering@yandex.ru'.")
+            warnings.warn("Incompatible C/C++ pyclustering library is being used ('" + version +"' instead of '" + ccore_library_version + "').\n" +
+                          "Probably library has not been successfully installed.\n" +
+                          "Please, contact 'pyclustering@yandex.ru'.", ResourceWarning)
 
         return ccore_library.__library
 

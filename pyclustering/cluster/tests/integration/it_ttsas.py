@@ -73,6 +73,9 @@ class ttsas_integration_tests(unittest.TestCase):
         ttsas_test.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 10.0, 20.0, [30], True);
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        ttsas_test.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, 2.0, [5, 5], True);
+    def runRemovedLibraryCoreTest(self):
+        ttsas_test.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, 2.0, [5, 5], True)

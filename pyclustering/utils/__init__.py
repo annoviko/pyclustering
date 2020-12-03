@@ -23,7 +23,7 @@ from pyclustering.utils.metric import distance_metric, type_metric
 
 
 ## The number \f$pi\f$ is a mathematical constant, the ratio of a circle's circumference to its diameter.
-pi = 3.1415926535
+pi = 3.14159265359
 
 
 def read_sample(filename, return_type='list'):
@@ -845,91 +845,91 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     return axes;
 
 
-def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, separate = False, axes = None):
+def draw_dynamics(t, dyn, x_title=None, y_title=None, x_lim=None, y_lim=None, x_labels=True, y_labels=True, separate=False, axis=None):
     """!
-    @brief Draw dynamics of neurons (oscillators) in the network.
-    @details It draws if matplotlib is not specified (None), othewise it should be performed manually.
+    @brief Draw dynamic of each neuron (oscillator) in an oscillatory network.
+    @details The function creates new `matplotlib` figure if `axis` is `None` and it should be closed when it is not needed.
     
-    @param[in] t (list): Values of time (used by x axis).
-    @param[in] dyn (list): Values of output of oscillators (used by y axis).
-    @param[in] x_title (string): Title for Y.
-    @param[in] y_title (string): Title for X.
-    @param[in] x_lim (double): X limit.
-    @param[in] y_lim (double): Y limit.
-    @param[in] x_labels (bool): If True - shows X labels.
-    @param[in] y_labels (bool): If True - shows Y labels.
-    @param[in] separate (list): Consists of lists of oscillators where each such list consists of oscillator indexes that will be shown on separated stage.
-    @param[in] axes (ax): If specified then matplotlib axes will be used for drawing and plot will not be shown.
+    @param[in] t (list): Time points that corresponds to the dynamic (X-axis).
+    @param[in] dyn (list): An output value of each oscillator (Y-axis).
+    @param[in] x_title (string): Title for X-axis.
+    @param[in] y_title (string): Title for Y-axis.
+    @param[in] x_lim (double): X-limit.
+    @param[in] y_lim (double): Y-limit.
+    @param[in] x_labels (bool): If `True` then it shows X-labels.
+    @param[in] y_labels (bool): If `True` then it shows Y-labels.
+    @param[in] separate (list): Lists of oscillators that should be displayed on separate plots. If `None` then all oscillators are going to be displayed on the same plot. By default is `None`.
+    @param[in] axis (ax): If specified then the axis will be used for drawing and plot will not be shown.
     
-    @return (ax) Axes of matplotlib.
+    @return (figure, Axis) Figure and axis where dynamic of each oscillator is presented. Figure is `None` if `axis`
+                            value that is not `None` is provided to the fuction.
     
     """
-         
-    number_lines = 0;
-    
-    stage_xlim = None;
-    if (x_lim is not None):
-        stage_xlim = x_lim;
+
+    stage_xlim = None
+    if x_lim is not None:
+        stage_xlim = x_lim
     elif (len(t) > 0):
-        stage_xlim = [0, t[len(t) - 1]];
+        stage_xlim = [0, t[len(t) - 1]]
     
-    if ( (isinstance(separate, bool) is True) and (separate is True) ):
-        if (isinstance(dyn[0], list) is True):
-            number_lines = len(dyn[0]);
+    if (isinstance(separate, bool) is True) and (separate is True):
+        if isinstance(dyn[0], list) is True:
+            number_lines = len(dyn[0])
         else:
-            number_lines = 1;
+            number_lines = 1
             
-    elif (isinstance(separate, list) is True):
-        number_lines = len(separate);
+    elif isinstance(separate, list) is True:
+        number_lines = len(separate)
         
     else:
-        number_lines = 1;
+        number_lines = 1
     
-    dysplay_result = False;
-    if (axes is None):
-        dysplay_result = True;
-        (fig, axes) = plt.subplots(number_lines, 1);
+    dysplay_result = False
+    figure = None
+    if axis is None:
+        dysplay_result = True
+        figure, axis = plt.subplots(number_lines, 1)
     
     # Check if we have more than one dynamic
-    if (isinstance(dyn[0], list) is True):
-        num_items = len(dyn[0]);
+    if isinstance(dyn[0], list) is True:
+        num_items = len(dyn[0])
         for index in range(0, num_items, 1):
-            y = [item[index] for item in dyn];
+            y = [item[index] for item in dyn]
             
-            if (number_lines > 1):
-                index_stage = -1;
+            if number_lines > 1:
+                index_stage = -1
                 
                 # Find required axes for the y
-                if (isinstance(separate, bool) is True):
-                    index_stage = index;
+                if isinstance(separate, bool) is True:
+                    index_stage = index
                     
-                elif (isinstance(separate, list) is True):
+                elif isinstance(separate, list) is True:
                     for index_group in range(0, len(separate), 1):
-                        if (index in separate[index_group]): 
-                            index_stage = index_group;
-                            break;
+                        if index in separate[index_group]:
+                            index_stage = index_group
+                            break
                 
-                if (index_stage != -1):
-                    if (index_stage != number_lines - 1):
-                        axes[index_stage].get_xaxis().set_visible(False);
+                if index_stage != -1:
+                    if index_stage != number_lines - 1:
+                        axis[index_stage].get_xaxis().set_visible(False)
                               
-                    axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
-                    set_ax_param(axes[index_stage], x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True);
+                    axis[index_stage].plot(t, y, 'b-', linewidth=0.5)
+                    set_ax_param(axis[index_stage], x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True)
                 
             else:
-                axes.plot(t, y, 'b-', linewidth = 0.5);
-                set_ax_param(axes, x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True);
+                axis.plot(t, y, 'b-', linewidth=0.5)
+                set_ax_param(axis, x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True)
     else:
-        axes.plot(t, dyn, 'b-', linewidth = 0.5);
-        set_ax_param(axes, x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True);
+        axis.plot(t, dyn, 'b-', linewidth=0.5)
+        set_ax_param(axis, x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True)
     
-    if (dysplay_result is True):
-        plt.show();
+    if dysplay_result is True:
+        plt.show()
     
-    return axes;
+    return figure, axis
 
 
-def set_ax_param(ax, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, grid = True):
+def set_ax_param(ax, x_title=None, y_title=None, x_lim=None, y_lim=None, x_labels=True, y_labels=True, grid=True):
     """!
     @brief Sets parameters for matplotlib ax.
     
@@ -938,44 +938,50 @@ def set_ax_param(ax, x_title = None, y_title = None, x_lim = None, y_lim = None,
     @param[in] y_title (string): Title for X.
     @param[in] x_lim (double): X limit.
     @param[in] y_lim (double): Y limit.
-    @param[in] x_labels (bool): If True - shows X labels.
-    @param[in] y_labels (bool): If True - shows Y labels.
-    @param[in] grid (bool): If True - shows grid.
+    @param[in] x_labels (bool): If `True` - shows X labels.
+    @param[in] y_labels (bool): If `True` - shows Y labels.
+    @param[in] grid (bool): If `True` - shows grid.
     
     """
-    from matplotlib.font_manager import FontProperties;
-    from matplotlib import rcParams;
+    from matplotlib.font_manager import FontProperties
+    from matplotlib import rcParams
     
     if (_platform == "linux") or (_platform == "linux2"):
-        rcParams['font.sans-serif'] = ['Liberation Serif'];
+        rcParams['font.sans-serif'] = ['Liberation Serif']
     else:
-        rcParams['font.sans-serif'] = ['Arial'];
+        rcParams['font.sans-serif'] = ['Arial']
         
-    rcParams['font.size'] = 12;
-        
-    surface_font = FontProperties();
+    rcParams['font.size'] = 12
+
+    surface_font = FontProperties()
     if (_platform == "linux") or (_platform == "linux2"):
-        surface_font.set_name('Liberation Serif');
+        surface_font.set_name('Liberation Serif')
     else:
-        surface_font.set_name('Arial');
+        surface_font.set_name('Arial')
         
-    surface_font.set_size('12');
+    surface_font.set_size('12')
     
-    if (y_title is not None): ax.set_ylabel(y_title, fontproperties = surface_font);
-    if (x_title is not None): ax.set_xlabel(x_title, fontproperties = surface_font);
+    if y_title is not None:
+        ax.set_ylabel(y_title, fontproperties = surface_font)
+    if x_title is not None:
+        ax.set_xlabel(x_title, fontproperties = surface_font)
     
-    if (x_lim is not None): ax.set_xlim(x_lim[0], x_lim[1]);
-    if (y_lim is not None): ax.set_ylim(y_lim[0], y_lim[1]);
+    if x_lim is not None:
+        ax.set_xlim(x_lim[0], x_lim[1])
+    if y_lim is not None:
+        ax.set_ylim(y_lim[0], y_lim[1])
     
-    if (x_labels is False): ax.xaxis.set_ticklabels([]);
-    if (y_labels is False): ax.yaxis.set_ticklabels([]);
+    if x_labels is False:
+        ax.xaxis.set_ticklabels([])
+    if y_labels is False:
+        ax.yaxis.set_ticklabels([])
     
-    ax.grid(grid);
+    ax.grid(grid)
 
 
-def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim = None, xlabels = False, ylabels = False):
+def draw_dynamics_set(dynamics, xtitle=None, ytitle=None, xlim=None, ylim=None, xlabels=False, ylabels=False):
     """!
-    @brief Draw lists of dynamics of neurons (oscillators) in the network.
+    @brief Draws dynamic of each neuron (oscillator) in an oscillatory network.
     
     @param[in] dynamics (list): List of network outputs that are represented by values of output of oscillators (used by y axis).
     @param[in] xtitle (string): Title for Y.
@@ -986,36 +992,38 @@ def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim 
     @param[in] ylabels (bool): If True - shows Y labels.
     
     """
-    # Calculate edge for confortable representation.
-    number_dynamics = len(dynamics);
-    if (number_dynamics == 1):
-        draw_dynamics(dynamics[0][0], dynamics[0][1], xtitle, ytitle, xlim, ylim, xlabels, ylabels);
-        return;
+    # Calculate edge for comfortable representation.
+    number_dynamics = len(dynamics)
+    if number_dynamics == 1:
+        figure, _ = draw_dynamics(dynamics[0][0], dynamics[0][1], xtitle, ytitle, xlim, ylim, xlabels, ylabels)
+        plt.close(figure)
+        return
     
-    number_cols = int(numpy.ceil(number_dynamics ** 0.5));
-    number_rows = int(numpy.ceil(number_dynamics / number_cols));
+    number_cols = int(numpy.ceil(number_dynamics ** 0.5))
+    number_rows = int(numpy.ceil(number_dynamics / number_cols))
 
-    real_index = 0, 0;
-    double_indexer = True;
-    if ( (number_cols == 1) or (number_rows == 1) ):
-        real_index = 0;
-        double_indexer = False;
+    real_index = 0, 0
+    double_indexer = True
+    if (number_cols == 1) or (number_rows == 1):
+        real_index = 0
+        double_indexer = False
     
-    (_, axarr) = plt.subplots(number_rows, number_cols);
+    figure, axarr = plt.subplots(number_rows, number_cols)
     #plt.setp([ax for ax in axarr], visible = False);
     
     for dynamic in dynamics:
-        axarr[real_index] = draw_dynamics(dynamic[0], dynamic[1], xtitle, ytitle, xlim, ylim, xlabels, ylabels, axes = axarr[real_index]);
+        axarr[real_index] = draw_dynamics(dynamic[0], dynamic[1], xtitle, ytitle, xlim, ylim, xlabels, ylabels, axis=axarr[real_index])
         #plt.setp(axarr[real_index], visible = True);
         
-        if (double_indexer is True):
-            real_index = real_index[0], real_index[1] + 1;
-            if (real_index[1] >= number_cols):
-                real_index = real_index[0] + 1, 0; 
+        if double_indexer is True:
+            real_index = real_index[0], real_index[1] + 1
+            if real_index[1] >= number_cols:
+                real_index = real_index[0] + 1, 0
         else:
-            real_index += 1;
+            real_index += 1
             
-    plt.show();
+    plt.show()
+    plt.close(figure)
 
 
 def draw_image_color_segments(source, clusters, hide_axes = True):
@@ -1030,44 +1038,45 @@ def draw_image_color_segments(source, clusters, hide_axes = True):
     
     """
         
-    image_source = Image.open(source);
-    image_size = image_source.size;
+    image_source = Image.open(source)
+    image_size = image_source.size
     
-    (fig, axarr) = plt.subplots(1, 2);
+    fig, axarr = plt.subplots(1, 2)
     
-    plt.setp([ax for ax in axarr], visible = False);
+    plt.setp([ax for ax in axarr], visible=False)
     
-    available_colors = [ (0, 162, 232),   (34, 177, 76),   (237, 28, 36),
-                         (255, 242, 0),   (0, 0, 0),       (237, 28, 36),
-                         (255, 174, 201), (127, 127, 127), (185, 122, 87), 
-                         (200, 191, 231), (136, 0, 21),    (255, 127, 39),
-                         (63, 72, 204),   (195, 195, 195), (255, 201, 14),
-                         (239, 228, 176), (181, 230, 29),  (153, 217, 234),
-                         (112, 146, 180) ];
+    available_colors = [(0, 162, 232),   (34, 177, 76),   (237, 28, 36),
+                        (255, 242, 0),   (0, 0, 0),       (237, 28, 36),
+                        (255, 174, 201), (127, 127, 127), (185, 122, 87),
+                        (200, 191, 231), (136, 0, 21),    (255, 127, 39),
+                        (63, 72, 204),   (195, 195, 195), (255, 201, 14),
+                        (239, 228, 176), (181, 230, 29),  (153, 217, 234),
+                        (112, 146, 180)]
     
-    image_color_segments = [(255, 255, 255)] * (image_size[0] * image_size[1]);
+    image_color_segments = [(255, 255, 255)] * (image_size[0] * image_size[1])
     
     for index_segment in range(len(clusters)):
         for index_pixel in clusters[index_segment]:
-            image_color_segments[index_pixel] = available_colors[index_segment];
+            image_color_segments[index_pixel] = available_colors[index_segment]
     
-    stage = array(image_color_segments, numpy.uint8);
-    stage = numpy.reshape(stage, (image_size[1], image_size[0]) + ((3),)); # ((3),) it's size of RGB - third dimension.
-    image_cluster = Image.fromarray(stage, 'RGB');
+    stage = array(image_color_segments, numpy.uint8)
+    stage = numpy.reshape(stage, (image_size[1], image_size[0]) + ((3),)) # ((3),) it's size of RGB - third dimension.
+    image_cluster = Image.fromarray(stage, 'RGB')
     
-    axarr[0].imshow(image_source, interpolation = 'none');
-    axarr[1].imshow(image_cluster, interpolation = 'none');
+    axarr[0].imshow(image_source, interpolation='none')
+    axarr[1].imshow(image_cluster, interpolation='none')
     
     for i in range(2):
-        plt.setp(axarr[i], visible = True);
+        plt.setp(axarr[i], visible=True)
         
-        if (hide_axes is True):
-            axarr[i].xaxis.set_ticklabels([]);
-            axarr[i].yaxis.set_ticklabels([]);
-            axarr[i].xaxis.set_ticks_position('none');
-            axarr[i].yaxis.set_ticks_position('none');
+        if hide_axes is True:
+            axarr[i].xaxis.set_ticklabels([])
+            axarr[i].yaxis.set_ticklabels([])
+            axarr[i].xaxis.set_ticks_position('none')
+            axarr[i].yaxis.set_ticks_position('none')
     
-    plt.show();
+    plt.show()
+    plt.close(fig)
 
 
 def draw_image_mask_segments(source, clusters, hide_axes = True):
@@ -1101,7 +1110,7 @@ def draw_image_mask_segments(source, clusters, hide_axes = True):
         real_index = 0
         double_indexer = False
     
-    (fig, axarr) = plt.subplots(number_rows, number_cols)
+    fig, axarr = plt.subplots(number_rows, number_cols)
     plt.setp([ax for ax in axarr], visible=False)
     
     axarr[real_index].imshow(image_source, interpolation='none')
@@ -1146,6 +1155,7 @@ def draw_image_mask_segments(source, clusters, hide_axes = True):
             real_index += 1
 
     plt.show()
+    plt.close(fig)
 
 
 def find_left_element(sorted_data, right, comparator):

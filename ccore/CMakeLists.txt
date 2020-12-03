@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 
-project(pyclustering VERSION 0.10.1.2 LANGUAGES CXX)
+project(pyclustering VERSION 0.11.0 LANGUAGES CXX)
 
 
 file(MAKE_DIRECTORY build)

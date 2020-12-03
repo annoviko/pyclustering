@@ -9,17 +9,13 @@
 
 """
 
-import warnings
-
 from math import floor
 
-try:
-    from PIL import Image
-except Exception as error_instance:
-    warnings.warn("Impossible to import PIL (please, install 'PIL'), pyclustering's visualization "
-                  "functionality is partially not available (details: '%s')." % str(error_instance))
+from PIL import Image
 
 from pyclustering.cluster.syncnet import syncnet
+
+from pyclustering.core.wrapper import ccore_library
 
 from pyclustering.nnet import solve_type, initial_type
 from pyclustering.nnet.sync import sync_visualizer
@@ -42,7 +38,7 @@ class syncsegm_visualizer:
         
         """
         
-        sync_visualizer.show_output_dynamic(analyser.get_first_layer_analyser());
+        sync_visualizer.show_output_dynamic(analyser.get_first_layer_analyser())
     
     
     @staticmethod
@@ -54,10 +50,10 @@ class syncsegm_visualizer:
         
         """
         
-        second_layer_analysers = analyser.get_second_layer_analysers();
-        analysers_sequence = [ object_segment_analyser['analyser'] for object_segment_analyser in second_layer_analysers ]
+        second_layer_analysers = analyser.get_second_layer_analysers()
+        analysers_sequence = [object_segment_analyser['analyser'] for object_segment_analyser in second_layer_analysers]
         
-        sync_visualizer.show_output_dynamics(analysers_sequence);
+        sync_visualizer.show_output_dynamics(analysers_sequence)
 
 
 class syncsegm_analyser:
@@ -66,7 +62,7 @@ class syncsegm_analyser:
     
     """
     
-    def __init__(self, color_analyser, object_segment_analysers = None):
+    def __init__(self, color_analyser, object_segment_analysers=None):
         """!
         @brief Constructor of the analyser.
         
@@ -75,8 +71,8 @@ class syncsegm_analyser:
         
         """
         
-        self.__color_analyser = color_analyser;
-        self.__object_segment_analysers = object_segment_analysers;
+        self.__color_analyser = color_analyser
+        self.__object_segment_analysers = object_segment_analysers
     
     
     def get_first_layer_analyser(self):
@@ -85,7 +81,7 @@ class syncsegm_analyser:
         
         """
         
-        return self.__color_analyser;
+        return self.__color_analyser
     
     
     def get_second_layer_analysers(self):
@@ -94,10 +90,10 @@ class syncsegm_analyser:
         
         """
         
-        return self.__object_segment_analysers;
+        return self.__object_segment_analysers
     
     
-    def allocate_colors(self, eps = 0.01, noise_size = 1):
+    def allocate_colors(self, eps=0.01, noise_size=1):
         """!
         @brief Allocates color segments.
         
@@ -108,12 +104,12 @@ class syncsegm_analyser:
         
         """
         
-        segments = self.__color_analyser.allocate_clusters(eps);
-        real_segments = [cluster for cluster in segments if len(cluster) > noise_size];
-        return real_segments;
+        segments = self.__color_analyser.allocate_clusters(eps)
+        real_segments = [cluster for cluster in segments if len(cluster) > noise_size]
+        return real_segments
     
     
-    def allocate_objects(self, eps = 0.01, noise_size = 1):
+    def allocate_objects(self, eps=0.01, noise_size=1):
         """!
         @brief Allocates object segments.
         
@@ -124,18 +120,18 @@ class syncsegm_analyser:
         
         """
         
-        if (self.__object_segment_analysers is None):
-            return [];
+        if self.__object_segment_analysers is None:
+            return []
         
-        segments = [];
+        segments = []
         for object_segment_analyser in self.__object_segment_analysers:
-            indexes = object_segment_analyser['color_segment'];
-            analyser = object_segment_analyser['analyser'];
+            indexes = object_segment_analyser['color_segment']
+            analyser = object_segment_analyser['analyser']
             
-            segments += analyser.allocate_clusters(eps, indexes);
+            segments += analyser.allocate_clusters(eps, indexes)
         
-        real_segments = [segment for segment in segments if len(segment) > noise_size];
-        return real_segments;
+        real_segments = [segment for segment in segments if len(segment) > noise_size]
+        return real_segments
 
 
 class syncsegm:
@@ -168,25 +164,27 @@ class syncsegm:
     
     def __init__(self, color_radius, object_radius, noise_size = 0, ccore = True):
         """!
-        @brief Contructor of the oscillatory network SYNC for cluster analysis.
+        @brief Constructor of the oscillatory network Sync for image segmentation.
         
         @param[in] color_radius (double): Radius of color connectivity (color similarity) for the first layer.
         @param[in] object_radius (double): Radius of object connectivity (object similarity) for the second layer,
                    if 'None' then object segmentation is not performed (only color segmentation).
         @param[in] noise_size (double): Size of segment that should be considered as a noise and ignored by the second layer.
-        @param[in] ccore (bool): If 'True' then C/C++ implementation is used to increase performance.
+        @param[in] ccore (bool): If `True` then C/C++ implementation is used to increase performance (by default is `True`).
         
         """
         
-        self.__color_radius     = color_radius;
-        self.__object_radius    = object_radius;
-        self.__noise_size       = noise_size;
+        self.__color_radius = color_radius
+        self.__object_radius = object_radius
+        self.__noise_size = noise_size
         
-        self.__order_color      = 0.9995;
-        self.__order_object     = 0.999;
+        self.__order_color = 0.9995
+        self.__order_object = 0.999
         
-        self.__network  = None;
-        self.__ccore    = ccore;
+        self.__network = None
+        self.__ccore = ccore
+        if self.__ccore is True:
+            self.__ccore = ccore_library.workable()
     
     
     def process(self, image_source, collect_dynamic = False, order_color = 0.9995, order_object = 0.999):
@@ -202,7 +200,7 @@ class syncsegm:
         
         """
         
-        self.__order_color  = order_color
+        self.__order_color = order_color
         self.__order_object = order_object
         
         data = read_image(image_source)
@@ -226,10 +224,10 @@ class syncsegm:
         
         """
         
-        network = syncnet(image_data, self.__color_radius, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = self.__ccore);
-        analyser = network.process(self.__order_color, solve_type.FAST, collect_dynamic);
+        network = syncnet(image_data, self.__color_radius, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = self.__ccore)
+        analyser = network.process(self.__order_color, solve_type.FAST, collect_dynamic)
         
-        return analyser;
+        return analyser
     
     
     def __analyse_objects(self, image_source, color_analyser, collect_dynamic):
@@ -245,20 +243,20 @@ class syncsegm:
         """
         
         # continue analysis
-        pointer_image = Image.open(image_source);
-        image_size = pointer_image.size;
+        pointer_image = Image.open(image_source)
+        image_size = pointer_image.size
         
-        object_analysers = [];
+        object_analysers = []
         
-        color_segments = color_analyser.allocate_clusters();
+        color_segments = color_analyser.allocate_clusters()
         
         for segment in color_segments:
-            object_analyser = self.__analyse_color_segment(image_size, segment, collect_dynamic);
-            if (object_analyser is not None):
-                object_analysers.append( { 'color_segment': segment, 'analyser': object_analyser } );
+            object_analyser = self.__analyse_color_segment(image_size, segment, collect_dynamic)
+            if object_analyser is not None:
+                object_analysers.append({'color_segment': segment, 'analyser': object_analyser})
     
-        pointer_image.close();
-        return object_analysers;
+        pointer_image.close()
+        return object_analysers
     
     
     def __analyse_color_segment(self, image_size, color_segment, collect_dynamic):
@@ -272,15 +270,15 @@ class syncsegm:
         @return (syncnet_analyser) Analyser of object segmentation results of the second layer.
         
         """
-        coordinates = self.__extract_location_coordinates(image_size, color_segment);
+        coordinates = self.__extract_location_coordinates(image_size, color_segment)
         
-        if (len(coordinates) < self.__noise_size):
-            return None;
+        if len(coordinates) < self.__noise_size:
+            return None
         
-        network = syncnet(coordinates, self.__object_radius, initial_phases = initial_type.EQUIPARTITION, ccore = True);
-        analyser = network.process(self.__order_object, solve_type.FAST, collect_dynamic);
+        network = syncnet(coordinates, self.__object_radius, initial_phases=initial_type.EQUIPARTITION, ccore=True)
+        analyser = network.process(self.__order_object, solve_type.FAST, collect_dynamic)
         
-        return analyser;
+        return analyser
     
     
     def __extract_location_coordinates(self, image_size, color_segment):
@@ -293,12 +291,11 @@ class syncsegm:
         @return (list) Coordinates of each pixel.
         
         """
-        coordinates = [];
+        coordinates = []
         for index in color_segment:
-            y = floor(index / image_size[0]);
-            x = index - y * image_size[0];
+            y = floor(index / image_size[0])
+            x = index - y * image_size[0]
             
-            coordinates.append([x, y]);
+            coordinates.append([x, y])
         
-        return coordinates;
-        
+        return coordinates

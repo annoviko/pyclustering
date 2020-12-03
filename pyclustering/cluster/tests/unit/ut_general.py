@@ -35,7 +35,8 @@ class Test(unittest.TestCase):
           
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize1DClustersOneCanvasNumpy(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, return_type='numpy')
@@ -43,21 +44,24 @@ class Test(unittest.TestCase):
 
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize1DClustersOneCanvasSampleOnly(self):
         clusters = [[[0.1], [0.2], [0.5]], [[0.1], [0.2], [0.5]]]
 
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize1DClustersOneCanvasSampleOnlyNumpy(self):
         clusters = numpy.array([[[0.1], [0.2], [0.5]], [[0.1], [0.2], [0.5]]])
 
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize1DClustersTwoCanvases(self):
         sample_simple7 = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE7)
@@ -67,7 +71,8 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer(2)
         visualizer.append_clusters([sample_simple7], None, 0, markersize=30)
         visualizer.append_clusters([sample_simple8], None, 1, markersize=30)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
  
     def testVisualize3DClustersOneCanvas(self):
         sample = read_sample(FCPS_SAMPLES.SAMPLE_HEPTA)
@@ -78,7 +83,8 @@ class Test(unittest.TestCase):
           
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample, markersize=30)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
  
     def testVisualize3DClustersTwoCanvases(self):
         sample_tetra = read_sample(FCPS_SAMPLES.SAMPLE_TETRA)
@@ -88,7 +94,8 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer(2)
         visualizer.append_clusters([sample_tetra], None, 0, markersize=30)
         visualizer.append_clusters([sample_hepta], None, 1, markersize=30)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize3DClustersTwoCanvasesNumpy(self):
         sample_tetra = read_sample(FCPS_SAMPLES.SAMPLE_TETRA, return_type='numpy')
@@ -98,7 +105,8 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer(2)
         visualizer.append_clusters([sample_tetra], None, 0, markersize=30)
         visualizer.append_clusters([sample_hepta], None, 1, markersize=30)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize2DClustersOneCanvas(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4)
@@ -109,7 +117,8 @@ class Test(unittest.TestCase):
           
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize2DClustersOneCanvasNumpy(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, return_type='numpy')
@@ -117,7 +126,8 @@ class Test(unittest.TestCase):
 
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize2DClustersThreeCanvases(self):
         sample_simple1 = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
@@ -132,7 +142,8 @@ class Test(unittest.TestCase):
         visualizer.append_clusters(clusters_sample1, sample_simple1, 0, markersize=5)
         visualizer.append_clusters(clusters_sample2, sample_simple2, 1, markersize=5)
         visualizer.append_clusters(clusters_sample3, sample_simple3, 2, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize2DClustersThreeCanvasesNumpy(self):
         sample_simple1 = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, return_type='numpy')
@@ -147,7 +158,8 @@ class Test(unittest.TestCase):
         visualizer.append_clusters(clusters_sample1, sample_simple1, 0, markersize=5)
         visualizer.append_clusters(clusters_sample2, sample_simple2, 1, markersize=5)
         visualizer.append_clusters(clusters_sample3, sample_simple3, 2, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize2DAnd3DClusters(self):
         sample_2d = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
@@ -156,7 +168,8 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer(2, 2)
         visualizer.append_clusters([sample_2d], None, 0, markersize=5)
         visualizer.append_clusters([sample_3d], None, 1, markersize=30)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualize2DAnd3DClustersNumpy(self):
         sample_2d = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, return_type='numpy')
@@ -165,7 +178,8 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer(2, 2)
         visualizer.append_clusters([sample_2d], None, 0, markersize=5)
         visualizer.append_clusters([sample_3d], None, 1, markersize=30)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualizeRectangeRepresentation2x2(self):
         sample_simple1 = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
@@ -176,7 +190,8 @@ class Test(unittest.TestCase):
         visualizer.append_clusters([sample_simple1], None, 0, markersize=5)
         visualizer.append_clusters([sample_simple2], None, 1, markersize=5)
         visualizer.append_clusters([sample_simple3], None, 2, markersize=5)
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
      
     def testVisualizeRectangeRepresentation3x5(self):
         visualizer = cluster_visualizer(15, 5)
@@ -185,7 +200,8 @@ class Test(unittest.TestCase):
             sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
             visualizer.append_clusters([sample], None, i, markersize=5)
          
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
      
     def testVisualizeByDataOnly(self):
         visualizer = cluster_visualizer()
@@ -193,7 +209,8 @@ class Test(unittest.TestCase):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
         visualizer.append_clusters([sample])
          
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
      
     def testVisualizeHugeAmountClusters(self):
         visualizer = cluster_visualizer()
@@ -201,7 +218,8 @@ class Test(unittest.TestCase):
         data_clusters = [[[random.random()]] for _ in range(0, 100)]
         visualizer.append_clusters(data_clusters)
 
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualizeOnExistedFigure(self):
         figure = plt.figure()
@@ -211,6 +229,7 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer()
         visualizer.append_clusters([sample])
         visualizer.show(figure)
+        visualizer.close(figure)
 
     def testVisualizeOnExistedFigureNumpy(self):
         figure = plt.figure()
@@ -220,6 +239,7 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer()
         visualizer.append_clusters(numpy.array([sample]))
         visualizer.show(figure)
+        visualizer.close(figure)
 
     def testVisualizeOnExistedFigureWithContent(self):
         figure = plt.figure()
@@ -231,6 +251,7 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer(size_row=2)
         visualizer.append_clusters([sample])
         visualizer.show(figure)
+        visualizer.close(figure)
 
     def testVisualizeOnExistedFigureWithContentNumpy(self):
         figure = plt.figure()
@@ -242,6 +263,7 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer(size_row=2)
         visualizer.append_clusters(numpy.array([sample]))
         visualizer.show(figure)
+        visualizer.close(figure)
 
     def testVisualizeOnExistedFigureWithContentByDefault(self):
         figure = plt.figure()
@@ -253,6 +275,7 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer()
         visualizer.append_clusters([sample])
         visualizer.show(figure)
+        visualizer.close(figure)
     
     def testVisualizeClusterWithAttributes(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
@@ -270,7 +293,8 @@ class Test(unittest.TestCase):
             visualizer.append_cluster_attribute(0, cluster_index, representors[cluster_index], '*', 10)
             visualizer.append_cluster_attribute(0, cluster_index, [means[cluster_index]], 'o')
         
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
     def testVisualizeClusterWithAttributesNumpy(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, return_type='numpy')
@@ -288,4 +312,5 @@ class Test(unittest.TestCase):
             visualizer.append_cluster_attribute(0, cluster_index, numpy.array(representors[cluster_index]), '*', 10)
             visualizer.append_cluster_attribute(0, cluster_index, numpy.array([means[cluster_index]]), 'o')
 
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)

@@ -199,6 +199,9 @@ class SomIntegrationTest(unittest.TestCase):
         SomTestTemplates.random_state(8, 1, type_conn.func_neighbor, 5, True)
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
+    def runRemovedLibraryCoreTest(self):
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], False, True)

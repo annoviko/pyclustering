@@ -29,6 +29,10 @@ class HhnIntegrationTest(unittest.TestCase):
     def testThreeEnsembles(self):
         HhnTestTemplates.templateSyncEnsembleAllocation([0, 0, 25, 25, 47, 47], None, 2400, 600, [[0, 1], [2, 3], [4, 5]], True);
 
+
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        HhnTestTemplates.templateSyncEnsembleAllocation([27, 27, 27], None, 600, 50, [[0, 1, 2]], True);
+    def runRemovedLibraryCoreTest(self):
+        HhnTestTemplates.templateSyncEnsembleAllocation([27, 27, 27], None, 600, 50, [[0, 1, 2]], True)

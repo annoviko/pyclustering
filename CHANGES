@@ -1,12 +1,36 @@
 ------------------------------------------------------------------------
 
+CHANGE NOTES FOR 0.11.0 (STARTED Nov 26, 2020), (RELEASED: -)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+
+- Introduced `close()` methods for visualizers (Python: `pyclustering`).
+  See: https://github.com/annoviko/pyclustering/issues/470
+
+- Supported `numpy` data type for `cluster_visualizer` and `cluster_visualizer_multidim` (Python: `pyclustering.cluster`).
+  See: https://github.com/annoviko/pyclustering/issues/660
+
+
+CORRECTED MAJOR BUGS:
+
+- Corrected failures in CNN visualizer methods `show_dynamic_matrix()` and `show_observation_matrix()` in case of matplotlib `3.3.3` (Python: `pyclustering.nnet.cnn`).
+  See: https://github.com/annoviko/pyclustering/issues/663 
+
+- Corrected memory leakage for visualizers that do not return figure where information was displayed (Python: `pyclustering`).
+  See: https://github.com/annoviko/pyclustering/issues/662
+
+
+------------------------------------------------------------------------
+
 CHANGE NOTES FOR 0.10.1.2 (STARTED Nov 25, 2020), (RELEASED: Nov 25, 2020)
 
 ------------------------------------------------------------------------
 
 CORRECTED MAJOR BUGS:
 
-- Corrected bug with empty clusters for K-Medoids (C++ `pyclustering::clst::kmeadois`).
+- Corrected bug with empty clusters for K-Medoids (C++: `pyclustering::clst::kmeadois`).
   See: https://github.com/annoviko/pyclustering/issues/659
 
 
@@ -18,7 +42,7 @@ CHANGE NOTES FOR 0.10.1.1 (STARTED Nov 24, 2020), (RELEASED: Nov 24, 2020)
 
 CORRECTED MAJOR BUGS:
 
-- Corrected bug with incorrect cluster allocation for K-Medoids (C++ `pyclustering::clst::kmeadois`).
+- Corrected bug with incorrect cluster allocation for K-Medoids (C++: `pyclustering::clst::kmeadois`).
   See: https://github.com/annoviko/pyclustering/issues/659
 
 

@@ -82,6 +82,9 @@ class SyncIntegrationTest(unittest.TestCase):
         SyncTestTemplates.templateVisualizerNoFailures(5, 10, True);
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        SyncTestTemplates.templateSimulateTest(10, 1, solve_type.FAST, ccore_flag = True);
+    def runRemovedLibraryCoreTest(self):
+        SyncTestTemplates.templateSimulateTest(10, 1, solve_type.FAST, ccore_flag=True)

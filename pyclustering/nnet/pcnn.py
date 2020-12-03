@@ -252,7 +252,8 @@ class pcnn_visualizer:
         
         """
         
-        draw_dynamics(pcnn_output_dynamic.time, pcnn_output_dynamic.output, x_title = "t", y_title = "y(t)", separate = separate_representation)
+        figure, _ = draw_dynamics(pcnn_output_dynamic.time, pcnn_output_dynamic.output, x_title="t", y_title="y(t)", separate=separate_representation)
+        plt.close(figure)
     
     @staticmethod
     def animate_spike_ensembles(pcnn_output_dynamic, image_size):
@@ -289,6 +290,7 @@ class pcnn_visualizer:
         
         im_ani = animation.ArtistAnimation(figure, spike_animation, interval=75, repeat_delay=3000, blit=True)
         plt.show()
+        plt.close(figure)
 
 
 class pcnn_network(network):

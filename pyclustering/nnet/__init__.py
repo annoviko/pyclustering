@@ -8,9 +8,9 @@
 
 """
 
-import math;
+import math
 
-from enum import IntEnum;
+from enum import IntEnum
 
 class initial_type(IntEnum):
     """!
@@ -19,10 +19,10 @@ class initial_type(IntEnum):
     """
     
     ## Output of oscillators are random in line with gaussian distribution.
-    RANDOM_GAUSSIAN = 0;
+    RANDOM_GAUSSIAN = 0
     
     ## Output of oscillators are equidistant from each other (uniformly distributed, not randomly).
-    EQUIPARTITION = 1;
+    EQUIPARTITION = 1
 
 
 class solve_type(IntEnum):
@@ -32,13 +32,13 @@ class solve_type(IntEnum):
     """
     
     ## Forward Euler first-order method.
-    FAST = 0;                   # Usual calculation: x(k + 1) = x(k) + f(x(k)).
+    FAST = 0                   # Usual calculation: x(k + 1) = x(k) + f(x(k)).
     
     ## Classic fourth-order Runge-Kutta method (fixed step).
-    RK4 = 1;
+    RK4 = 1
     
     ## Runge-Kutta-Fehlberg method with order 4 and 5 (float step)."
-    RKF45 = 2;
+    RKF45 = 2
 
 
 class conn_type(IntEnum):
@@ -48,22 +48,22 @@ class conn_type(IntEnum):
     """
     
     ## No connection between oscillators.
-    NONE = 0;
+    NONE = 0
     
     ## All oscillators have connection with each other.
-    ALL_TO_ALL = 1;
+    ALL_TO_ALL = 1
     
     ## Connections between oscillators represent grid where one oscillator can be connected with four neighbor oscillators: right, upper, left, lower.
-    GRID_FOUR = 2;
+    GRID_FOUR = 2
     
     ## Connections between oscillators represent grid where one oscillator can be connected with eight neighbor oscillators: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right.
-    GRID_EIGHT = 3;
+    GRID_EIGHT = 3
     
     ## Connections between oscillators represent bidirectional list.
-    LIST_BIDIR = 4; 
+    LIST_BIDIR = 4
     
     ## Connections are defined by user or by network during simulation.
-    DYNAMIC = 5;
+    DYNAMIC = 5
 
 
 class conn_represent(IntEnum):
@@ -73,10 +73,10 @@ class conn_represent(IntEnum):
     """
     
     ## Each oscillator has list of his neighbors.
-    LIST = 0;
+    LIST = 0
     
     ## Connections are represented my matrix connection NxN, where N is number of oscillators.
-    MATRIX = 1;    
+    MATRIX = 1
 
 
 class network:
@@ -85,14 +85,14 @@ class network:
     
     """
     
-    _num_osc = 0;
+    _num_osc = 0
     
-    _osc_conn = None;
-    _conn_represent = None;
-    __conn_type = None;
+    _osc_conn = None
+    _conn_represent = None
+    __conn_type = None
     
-    __height = 0;
-    __width = 0;
+    __height = 0
+    __width = 0
     
     
     @property
@@ -103,7 +103,7 @@ class network:
         @note This property returns valid value only for network with grid structure.
         
         """
-        return self.__height;
+        return self.__height
     
 
     @property
@@ -114,7 +114,7 @@ class network:
         @note This property returns valid value only for network with grid structure.
         
         """
-        return self.__width;
+        return self.__width
 
 
     @property
@@ -123,7 +123,7 @@ class network:
         @brief Type of network structure that is used for connecting oscillators.
         
         """        
-        return self.__conn_type;
+        return self.__conn_type
    
    
     def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_repr = conn_represent.MATRIX, height = None, width = None):
@@ -140,29 +140,29 @@ class network:
         
         """
         
-        self._num_osc = num_osc;
-        self._conn_represent = conn_repr;
-        self.__conn_type = type_conn;
+        self._num_osc = num_osc
+        self._conn_represent = conn_repr
+        self.__conn_type = type_conn
         
-        if (conn_repr is None):
-            self._conn_represent = conn_represent.MATRIX;
+        if conn_repr is None:
+            self._conn_represent = conn_represent.MATRIX
         
-        if ( (type_conn == conn_type.GRID_EIGHT) or (type_conn == conn_type.GRID_FOUR) ):
-            if ( (height is not None) and (width is not None) ):
-                self.__height = height;
-                self.__width = width;
+        if (type_conn == conn_type.GRID_EIGHT) or (type_conn == conn_type.GRID_FOUR):
+            if (height is not None) and (width is not None):
+                self.__height = height
+                self.__width = width
             else:
-                side_size = self._num_osc ** (0.5);
+                side_size = self._num_osc ** 0.5
                 if (side_size - math.floor(side_size) > 0):
                     raise NameError("Invalid number of oscillators '" + str(num_osc) + "' in the network in case of grid structure (root square should be extractable for the number of oscillators).");
                 
-                self.__height = int(side_size);
-                self.__width = self.__height;
+                self.__height = int(side_size)
+                self.__width = self.__height
         
-            if (self.__height * self.__width != self._num_osc):
+            if self.__height * self.__width != self._num_osc:
                 raise NameError('Width (' + str(self.__width) + ') x Height (' + str(self.__height) + ') must be equal to Size (' + str(self._num_osc) + ') in case of grid structure');
         
-        self._create_structure(type_conn);
+        self._create_structure(type_conn)
     
     
     def __len__(self):

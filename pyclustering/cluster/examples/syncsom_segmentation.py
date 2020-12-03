@@ -8,14 +8,12 @@
 
 """
 
-from PIL import Image;
+from pyclustering.utils import draw_image_mask_segments, read_image, draw_dynamics
+from pyclustering.utils import timedcall
 
-from pyclustering.utils import draw_image_mask_segments, read_image, draw_dynamics;
-from pyclustering.utils import timedcall;
+from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES
 
-from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
-
-from pyclustering.cluster.syncsom import syncsom;
+from pyclustering.cluster.syncsom import syncsom
 
 def template_segmentation_image(source, map_som_size = [5, 5], radius = 128.0, sync_order = 0.998, show_dyn = False, show_som_map = False):
     data = read_image(source);

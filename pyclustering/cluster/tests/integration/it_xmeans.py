@@ -368,7 +368,12 @@ class XmeansIntegrationTest(unittest.TestCase):
     def test_random_state_65536_by_core(self):
         XmeansTestTemplates.random_state(True, 2, 10, 65536)
 
+
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
+    def runRemovedLibraryCoreTest(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
+

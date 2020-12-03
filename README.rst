@@ -9,7 +9,7 @@ Python and C++ implementations (C++ pyclustering library) of each algorithm or
 model. C++ pyclustering library is a part of pyclustering and supported for
 Linux, Windows and MacOS operating systems.
 
-**Version**: 0.10.1.2
+**Version**: 0.11.dev
 
 **License**: The 3-Clause BSD License
 

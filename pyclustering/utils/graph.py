@@ -274,4 +274,5 @@ def draw_graph(graph_instance, map_coloring = None):
     plt.xlim(x_minimum - 0.5, x_maximum + 0.5);
     plt.ylim(y_minimum - 0.5, y_maximum + 0.5);
     
-    plt.show();
+    plt.show()
+    plt.close(fig)

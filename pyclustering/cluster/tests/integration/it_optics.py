@@ -107,6 +107,9 @@ class OpticsIntegrationTest(unittest.TestCase):
         assert len(optics_instance.get_clusters()) == 2;
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
+    def runRemovedLibraryCoreTest(self):
         OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, None, [5, 5], True)

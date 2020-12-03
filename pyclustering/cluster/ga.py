@@ -185,6 +185,7 @@ class ga_visualizer:
         """!
         @brief Displays evolution of fitness function for the best chromosome, for the current best chromosome and
                 average value among all chromosomes.
+        @details Created figure should be closed by `close()` method of this visualizer.
         
         @param[in] observer (ga_observer): Genetic algorithm observer that was used for collecting evolution in the algorithm and
                     where whole required information for visualization is stored.
@@ -193,13 +194,15 @@ class ga_visualizer:
         @param[in] ax (Axes): Canvas where evolution should be displayed.
         @param[in] display (bool): If 'True' then visualization of the evolution will be shown by the function.
                     This argument should be 'False' if you want to add something else to the canvas and display it later.
-        
-        @return (Axis) Canvas where evolution was shown.
+
+        @return (figure, Axis) Figure and axis where evolution was shown. Figure might be `None` if axis was provided to
+                 that method.
         
         """
-        
-        if (ax is None):
-            _, ax = plt.subplots(1)
+
+        figure = None
+        if ax is None:
+            figure, ax = plt.subplots(1)
             ax.set_title("Evolution")
         
         if stop_iteration is None:
@@ -219,8 +222,8 @@ class ga_visualizer:
 
         if display is True:
             plt.show()
-        
-        return ax
+
+        return figure, ax
 
 
     @staticmethod
@@ -246,9 +249,10 @@ class ga_visualizer:
         
         visualizer = cluster_visualizer(1, 2)
         visualizer.append_clusters(clusters, data, 0, marker, markersize)
-        visualizer.show(figure, display=False)
-        
+        figure = visualizer.show(figure, display=False)
+
         ga_visualizer.show_evolution(observer, 0, None, ax1, True)
+        plt.close(figure)
 
 
     @staticmethod
@@ -299,6 +303,19 @@ class ga_visualizer:
             cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=1500)
         else:
             plt.show()
+
+        plt.close(figure)
+
+
+    @staticmethod
+    def close(figure):
+        """!
+        @brief Closes figure object that was used or allocated by the visualizer.
+
+        @param[in] figure (figure): Figure object that was used or allocated by the visualizer.
+
+        """
+        plt.close(figure)
 
 
 class genetic_algorithm:

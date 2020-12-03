@@ -118,32 +118,32 @@ class FsyncUnitTest(unittest.TestCase):
 
 
     def templateNoOscillations(self, size, steps, time, frequency, radius, amplitude_threshold):
-        oscillatory_network = fsync_network(size, frequency, radius);
-        output_dynamic = oscillatory_network.simulate(steps, time, True);
+        oscillatory_network = fsync_network(size, frequency, radius)
+        output_dynamic = oscillatory_network.simulate(steps, time, True)
         
         for index_oscillator in range(len(oscillatory_network)):
             assert output_dynamic.extract_number_oscillations(index_oscillator, amplitude_threshold) == 0;
 
     def testNoOscillationsZeroFrequency(self):
-        self.templateNoOscillations(5, 50, 10, 0.0, 1.0, 0.5);
+        self.templateNoOscillations(5, 50, 10, 0.0, 1.0, 0.5)
 
     def testNoOscillationsZeroRadius(self):
-        self.templateNoOscillations(5, 50, 10, 1.0, 0.0, 0.5);
+        self.templateNoOscillations(5, 50, 10, 1.0, 0.0, 0.5)
 
 
     def testLackCrashGraphics(self):
-        oscillatory_network = fsync_network(5);
+        oscillatory_network = fsync_network(5)
         
-        output_dynamic = oscillatory_network.simulate(50, 10, True);
+        output_dynamic = oscillatory_network.simulate(50, 10, True)
         
-        fsync_visualizer.show_output_dynamic(output_dynamic);
-        fsync_visualizer.show_output_dynamics([output_dynamic]);
+        fsync_visualizer.show_output_dynamic(output_dynamic)
+        fsync_visualizer.show_output_dynamics([output_dynamic])
 
     def testLackCrashGraphicsDynamicSet(self):
-        oscillatory_network_1 = fsync_network(2);
-        oscillatory_network_2 = fsync_network(3);
+        oscillatory_network_1 = fsync_network(2)
+        oscillatory_network_2 = fsync_network(3)
         
-        output_dynamic_1 = oscillatory_network_1.simulate(50, 10, True);
-        output_dynamic_2 = oscillatory_network_2.simulate(50, 10, True);
+        output_dynamic_1 = oscillatory_network_1.simulate(50, 10, True)
+        output_dynamic_2 = oscillatory_network_2.simulate(50, 10, True)
 
-        fsync_visualizer.show_output_dynamics([output_dynamic_1, output_dynamic_2]);
+        fsync_visualizer.show_output_dynamics([output_dynamic_1, output_dynamic_2])

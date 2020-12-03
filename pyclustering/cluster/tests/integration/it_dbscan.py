@@ -103,7 +103,10 @@ class DbscanIntegrationTest(unittest.TestCase):
     def test_pickle_dump_load(self):
         DbscanTestTemplates.pickle_dump_load(True)
 
-    @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], True)
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
+    @remove_library
+    def runRemovedLibraryCoreTest(self):
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], True)

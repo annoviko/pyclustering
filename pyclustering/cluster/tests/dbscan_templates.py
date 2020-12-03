@@ -8,7 +8,9 @@
 
 """
 
+import os
 import pickle
+import tempfile
 
 from random import random, shuffle
 
@@ -170,6 +172,8 @@ class DbscanTestTemplates:
 
     @staticmethod
     def pickle_dump_load(ccore):
+        dump_file_name = tempfile.gettempdir() + os.sep + 'test_dbscan_file.pkl'
+
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
         dbscan_instance = dbscan(sample, 0.7, 3, ccore)
         dbscan_instance.process()
@@ -178,13 +182,15 @@ class DbscanTestTemplates:
         expected_noise = dbscan_instance.get_noise()
         expected_encoding = dbscan_instance.get_cluster_encoding()
 
-        dbscan_dump_file = open('test_dbscan_file.pkl', 'wb')
+        dbscan_dump_file = open(dump_file_name, 'wb')
         pickle.dump(dbscan_instance, dbscan_dump_file)
         dbscan_dump_file.close()
 
-        dbscan_dump_file = open('test_dbscan_file.pkl', 'rb')
+        dbscan_dump_file = open(dump_file_name, 'rb')
         dbscan_instance = pickle.load(dbscan_dump_file)
         dbscan_dump_file.close()
+
+        os.remove(dump_file_name)
 
         assertion.eq(expected_clusters, dbscan_instance.get_clusters())
         assertion.eq(expected_noise, dbscan_instance.get_noise())

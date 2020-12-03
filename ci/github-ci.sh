@@ -42,6 +42,7 @@ run_pypi_install_job() {
     PYPI_SOURCE=$1
 
     if [[ $PYPI_SOURCE == "testpypi" ]]; then
+        pip3 install matplotlib   # 27.11.2020: impossible to install from testpypi
         pip3 install --extra-index-url https://testpypi.python.org/pypi pyclustering
     else
         pip3 install pyclustering

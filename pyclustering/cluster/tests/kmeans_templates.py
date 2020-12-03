@@ -139,7 +139,8 @@ class KmeansTestTemplates:
         clusters = kmeans_instance.get_clusters()
         centers = kmeans_instance.get_centers()
 
-        kmeans_visualizer.show_clusters(sample, clusters, centers, initial_centers)
+        figure = kmeans_visualizer.show_clusters(sample, clusters, centers, initial_centers)
+        kmeans_visualizer.close(figure)
 
 
     @staticmethod

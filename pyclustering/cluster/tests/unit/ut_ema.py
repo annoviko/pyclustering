@@ -185,8 +185,9 @@ class EmaUnitTest(unittest.TestCase):
         means = ema_instance.get_centers()
         covariances = ema_instance.get_covariances()
         
-        ema_visualizer.show_clusters(clusters, sample, covariances, means)
+        figure = ema_visualizer.show_clusters(clusters, sample, covariances, means)
         ema_visualizer.animate_cluster_allocation(sample, observer_instance)
+        ema_visualizer.close(figure)
 
 
     def test_incorrect_data(self):

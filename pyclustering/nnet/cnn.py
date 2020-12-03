@@ -16,6 +16,7 @@ import random
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.font_manager import FontProperties
+from mpl_toolkits.mplot3d import Axes3D
 
 from enum import IntEnum
 
@@ -174,7 +175,8 @@ class cnn_visualizer:
         
         """
         
-        draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title="t", y_title="x")
+        figure, _ = draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title="t", y_title="x")
+        plt.close(figure)
     
     
     @staticmethod
@@ -191,9 +193,12 @@ class cnn_visualizer:
         """
 
         network_dynamic = numpy.array(cnn_output_dynamic.output)
-        
-        plt.imshow(network_dynamic.T, cmap=plt.get_cmap('gray'), interpolation='None', vmin=0.0, vmax=1.0)
+
+        figure, axes = plt.subplots(1)
+
+        axes.imshow(network_dynamic.T, cmap=plt.get_cmap('gray'), aspect='auto', interpolation='None', vmin=0.0, vmax=1.0)
         plt.show()
+        plt.close(figure)
     
     
     @staticmethod
@@ -210,8 +215,12 @@ class cnn_visualizer:
         """
         
         observation_matrix = numpy.array(cnn_output_dynamic.allocate_observation_matrix())
-        plt.imshow(observation_matrix.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0)
+
+        figure, axes = plt.subplots(1)
+
+        axes.imshow(observation_matrix.T, cmap=plt.get_cmap('gray'), aspect='auto', interpolation='None', vmin=0.0, vmax=1.0)
         plt.show()
+        plt.close(figure)
 
 
 class cnn_network:
@@ -453,6 +462,7 @@ class cnn_network:
                 
         plt.grid()
         plt.show()
+        plt.close(fig)
     
     
     def __create_surface(self, dimension):
@@ -479,4 +489,4 @@ class cnn_network:
         surface_font.set_name('Arial')
         surface_font.set_size('12')
         
-        return (fig, axes)
+        return fig, axes

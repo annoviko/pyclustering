@@ -171,7 +171,7 @@ class sync_dynamic:
             raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.')
 
 
-    def allocate_sync_ensembles(self, tolerance = 0.01, indexes = None, iteration = None):
+    def allocate_sync_ensembles(self, tolerance=0.01, indexes=None, iteration=None):
         """!
         @brief Allocate clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
                
@@ -235,7 +235,7 @@ class sync_dynamic:
         return clusters
 
 
-    def allocate_phase_matrix(self, grid_width = None, grid_height = None, iteration = None):
+    def allocate_phase_matrix(self, grid_width=None, grid_height=None, iteration=None):
         """!
         @brief Returns 2D matrix of phase values of oscillators at the specified iteration of simulation.
         @details User should ensure correct matrix sizes in line with following expression grid_width x grid_height that should be equal to 
@@ -267,8 +267,8 @@ class sync_dynamic:
             width_matrix = int(math.ceil(math.sqrt(number_oscillators)))
             height_matrix = width_matrix
 
-        if (number_oscillators != width_matrix * height_matrix):
-            raise NameError("Impossible to allocate phase matrix with specified sizes, amout of neurons should be equal to grid_width * grid_height.");
+        if number_oscillators != width_matrix * height_matrix:
+            raise NameError("Impossible to allocate phase matrix with specified sizes, amout of neurons should be equal to grid_width * grid_height.")
 
         phase_matrix = [[0.0 for _ in range(width_matrix)] for _ in range(height_matrix)]
         for i in range(height_matrix):
@@ -302,7 +302,7 @@ class sync_dynamic:
             current_dynamic = dynamic[iteration]
 
         number_oscillators = len(dynamic[0])
-        affinity_matrix = [[0.0 for i in range(number_oscillators)] for j in range(number_oscillators)]
+        affinity_matrix = [[0.0 for _ in range(number_oscillators)] for _ in range(number_oscillators)]
 
         for i in range(number_oscillators):
             for j in range(number_oscillators):
@@ -426,7 +426,8 @@ class sync_visualizer:
         
         """
 
-        draw_dynamics(sync_output_dynamic.time, sync_output_dynamic.output, x_title="t", y_title="phase", y_lim=[0, 2 * 3.14])
+        figure, _ = draw_dynamics(sync_output_dynamic.time, sync_output_dynamic.output, x_title="t", y_title="phase", y_lim=[0, 2 * pi])
+        plt.close(figure)
 
 
     @staticmethod
@@ -455,12 +456,12 @@ class sync_visualizer:
                     allocation.
         
         """
-
-        _ = plt.figure()
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(iteration)
 
-        plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', vmin=0.0, vmax=1.0)
+        figure, axes = plt.subplots(1)
+        axes.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', vmin=0.0, vmax=1.0)
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -478,12 +479,12 @@ class sync_visualizer:
                     If iternation number is not specified, the last step of simulation is used for the matrix allocation.
         
         """
-
-        _ = plt.figure()
         phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, iteration)
 
-        plt.imshow(phase_matrix, cmap = plt.get_cmap('jet'), interpolation='kaiser', vmin=0.0, vmax=2.0 * math.pi)
+        figure, axes = plt.subplots(1)
+        axes.imshow(phase_matrix, cmap=plt.get_cmap('jet'), interpolation='kaiser', vmin=0.0, vmax=2.0 * math.pi)
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -500,11 +501,12 @@ class sync_visualizer:
         (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration)
 
         order_parameter = sync_output_dynamic.calculate_order_parameter(start_iteration, stop_iteration)
-        axis = plt.subplot(111)
-        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
-        set_ax_param(axis, "t", "R (order parameter)", None, [0.0, 1.05])
+        figure, axis = plt.subplots(1)
+        axis.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
+        set_ax_param(axis, "t", "R (order parameter)", [0.0, None], [0.0, 1.05])
 
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -521,11 +523,12 @@ class sync_visualizer:
         (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration)
 
         order_parameter = sync_output_dynamic.calculate_local_order_parameter(oscillatory_network, start_iteration, stop_iteration)
-        axis = plt.subplot(111)
-        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
+        figure, axis = plt.subplots(1, 1)
+        axis.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
         set_ax_param(axis, "t", "R (local order parameter)", None, [0.0, 1.05])
 
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -560,6 +563,8 @@ class sync_visualizer:
         else:
             plt.show()
 
+        plt.close(figure)
+
 
     @staticmethod
     def animate_correlation_matrix(sync_output_dynamic, animation_velocity = 75, colormap = 'cool', save_movie = None):
@@ -593,6 +598,8 @@ class sync_visualizer:
             correlation_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
             plt.show()
+
+        plt.close(figure)
 
 
     @staticmethod
@@ -631,6 +638,8 @@ class sync_visualizer:
             phase_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
             plt.show()
+
+        plt.close(figure)
 
 
     @staticmethod
@@ -697,6 +706,7 @@ class sync_visualizer:
         else:
             plt.show()
 
+        plt.close(figure)
 
 
 class sync_network(network):

@@ -60,6 +60,9 @@ class LegionIntergrationTest(unittest.TestCase):
         LegionTestTemplates.templateOutputDynamicInformation([1, 0, 1], legion_parameters(), conn_type.LIST_BIDIR, 100, 100, True)
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
+    def runRemovedLibraryCoreTest(self):
         LegionTestTemplates.templateOscillationsWithStructures(conn_type.LIST_BIDIR, True)

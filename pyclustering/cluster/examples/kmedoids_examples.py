@@ -64,8 +64,7 @@ def cluster_elongate():
     template_clustering([8, 56], SIMPLE_SAMPLES.SAMPLE_ELONGATE)
 
 def cluster_lsun():
-    #template_clustering([10, 275, 385], FCPS_SAMPLES.SAMPLE_LSUN)
-    template_clustering([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], FCPS_SAMPLES.SAMPLE_LSUN, data_type='distance_matrix')
+    template_clustering([10, 275, 385], FCPS_SAMPLES.SAMPLE_LSUN)
 
 def cluster_target():
     template_clustering([10, 160, 310, 460, 560, 700], FCPS_SAMPLES.SAMPLE_TARGET)

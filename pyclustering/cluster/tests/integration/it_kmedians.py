@@ -130,8 +130,11 @@ class KmediansIntegrationTest(unittest.TestCase):
         assert len(kmedians_instance.get_clusters()) == 2
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
+    def runRemovedLibraryCoreTest(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True)
 
 

@@ -10,7 +10,6 @@
 """
 
 import itertools
-import warnings
 
 import matplotlib
 import matplotlib.gridspec as gridspec
@@ -64,6 +63,7 @@ class bang_visualizer:
             bang_visualizer.__draw_two_dimension_data(ax, directory.get_data(), pairs[index])
 
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -76,7 +76,7 @@ class bang_visualizer:
         @see bang.get_dendrogram()
 
         """
-        plt.figure()
+        figure = plt.figure()
         axis = plt.subplot(1, 1, 1)
 
         current_position = 0
@@ -94,6 +94,7 @@ class bang_visualizer:
 
         plt.xlim([-0.5, current_position - 0.5])
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -109,7 +110,8 @@ class bang_visualizer:
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, data)
         visualizer.append_cluster(noise or [], data, marker='x')
-        visualizer.show()
+        figure = visualizer.show()
+        visualizer.close(figure)
 
 
     @staticmethod
@@ -251,6 +253,14 @@ class bang_animator:
         self.__special_frame = 0
 
         self.__validate_arguments()
+
+
+    def __del__(self):
+        """!
+        @brief Destructor of the BANG animator.
+
+        """
+        plt.close(self.__figure)
 
 
     def __validate_arguments(self):

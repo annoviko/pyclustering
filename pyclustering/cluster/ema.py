@@ -326,9 +326,10 @@ class ema_visualizer:
     """
     
     @staticmethod
-    def show_clusters(clusters, sample, covariances, means, figure = None, display = True):
+    def show_clusters(clusters, sample, covariances, means, figure=None, display=True):
         """!
         @brief Draws clusters and in case of two-dimensional dataset draws their ellipses.
+        @details Allocated figure by this method should be closed using `close()` method of this visualizer.
         
         @param[in] clusters (list): Clusters that were allocated by the algorithm.
         @param[in] sample (list): Dataset that were used for clustering.
@@ -347,9 +348,9 @@ class ema_visualizer:
         visualizer.append_clusters(clusters, sample)
         
         if figure is None:
-            figure = visualizer.show(display = False)
+            figure = visualizer.show(display=False)
         else:
-            visualizer.show(figure = figure, display = False)
+            visualizer.show(figure=figure, display=False)
         
         if len(sample[0]) == 2:
             ema_visualizer.__draw_ellipses(figure, visualizer, clusters, covariances, means)
@@ -358,6 +359,17 @@ class ema_visualizer:
             plt.show()
 
         return figure
+
+
+    @staticmethod
+    def close(figure):
+        """!
+        @brief Closes figure object that was used or allocated by the visualizer.
+
+        @param[in] figure (figure): Figure object that was used or allocated by the visualizer.
+
+        """
+        plt.close(figure)
 
 
     @staticmethod
@@ -388,17 +400,19 @@ class ema_visualizer:
             means = observer.get_evolution_means()[index_iteration]
             
             ema_visualizer.show_clusters(clusters, data, covariances, means, figure, False)
-            figure.subplots_adjust(top = 0.85)
+            figure.subplots_adjust(top=0.85)
             
-            return [ figure.gca() ]
+            return [figure.gca()]
 
         iterations = len(observer)
         cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval = animation_velocity, init_func = init_frame, repeat_delay = 5000)
 
         if save_movie is not None:
-            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = movie_fps, bitrate = 1500)
+            cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=1500)
         else:
             plt.show()
+
+        plt.close(figure)
 
 
     @staticmethod

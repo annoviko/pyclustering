@@ -171,8 +171,11 @@ class KmedoidsIntegrationTest(unittest.TestCase):
         kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 1, None, True)
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemoveLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
+    def runRemoveLibraryCoreTest(self):
         kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True)
 
 
