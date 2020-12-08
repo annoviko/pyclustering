@@ -362,7 +362,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
     }
 
     /* push back the first object to the first cluster */
-    ensembles.push_back(sync_ensemble());
+    ensembles.emplace_back(sync_ensemble());
     ensembles[0].push_back(0);
 
     sync_dynamic::const_iterator last_state_dynamic = cbegin() + iteration;

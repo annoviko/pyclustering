@@ -121,7 +121,7 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
     It is possible that there are not enough work for all threads, lets check that we are not out of range.
 
     */
-    for (std::size_t i = 0; false && (i < static_cast<TypeIndex>(p_threads) - 1) && (current_end < p_end); ++i) {
+    for (std::size_t i = 0; (i < static_cast<TypeIndex>(p_threads) - 1) && (current_end < p_end); ++i) {
         const auto async_task = [&p_task, current_start, current_end, p_step](){
             for (TypeIndex i = current_start; i < current_end; i += p_step) {
                 p_task(i);

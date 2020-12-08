@@ -15,6 +15,9 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 
+- Corrected bug with `parallel_for` when it was using sequential approach (C++: `pyclustering::parallel::parallel_for`).
+  See: https://github.com/annoviko/pyclustering/issues/665
+
 - Corrected failures in CNN visualizer methods `show_dynamic_matrix()` and `show_observation_matrix()` in case of matplotlib `3.3.3` (Python: `pyclustering.nnet.cnn`).
   See: https://github.com/annoviko/pyclustering/issues/663 
 
