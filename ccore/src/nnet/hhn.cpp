@@ -302,11 +302,13 @@ std::ostream& operator<<(std::ostream & p_stream, const hhn_dynamic & p_dynamic)
     std::set<hhn_dynamic::collect> enabled;
     p_dynamic.get_enabled(enabled);
 
-    const std::array<hhn_dynamic::collect, 4> order_types = {
+    const std::array<hhn_dynamic::collect, 4> order_types { 
+        {
             hhn_dynamic::collect::MEMBRANE_POTENTIAL,
             hhn_dynamic::collect::ACTIVE_COND_SODIUM,
             hhn_dynamic::collect::INACTIVE_COND_SODIUM,
             hhn_dynamic::collect::ACTIVE_COND_POTASSIUM
+        }
     };
 
     p_stream << p_dynamic.size_dynamic() << " " << p_dynamic.size_network() << "\n";
