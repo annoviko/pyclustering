@@ -136,7 +136,7 @@ cure_queue::~cure_queue() {
 
 
 void cure_queue::create_queue(const dataset * data) {
-    std::list<cure_cluster *> temporary_storage;
+    std::vector<cure_cluster *> temporary_storage;
 
     for (auto & data_point : (*data)) {
         cure_cluster * cluster = new cure_cluster((std::vector<double> *) &data_point);
@@ -209,7 +209,6 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
     merged_cluster->mean = new std::vector<double>((*cluster1->points)[0]->size(), 0);
 
-    //If all elements were same then avoid calculating the mean mathematically as it may lead to precision error.
     if (are_all_elements_same(merged_cluster)) {
         for (std::size_t i = 0; i < (*merged_cluster->points)[0]->size(); i++) {
             (*merged_cluster->mean)[i] = (*(*merged_cluster->points)[0])[i];
@@ -217,8 +216,12 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
     }
     else {
+        const double length_cluster1 = static_cast<double>(cluster1->points->size());
+        const double length_cluster2 = static_cast<double>(cluster2->points->size());
+        const double total_length = length_cluster1 + length_cluster2;
+
         for (std::size_t dimension = 0; dimension < merged_cluster->mean->size(); dimension++) {
-            (*merged_cluster->mean)[dimension] = (cluster1->points->size() * (*cluster1->mean)[dimension] + cluster2->points->size() * (*cluster2->mean)[dimension]) / (cluster1->points->size() + cluster2->points->size());
+            (*merged_cluster->mean)[dimension] = (length_cluster1 * (*cluster1->mean)[dimension] + length_cluster2 * (*cluster2->mean)[dimension]) / total_length;
         }
     }
 
@@ -270,7 +273,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
     insert_representative_points(merged_cluster);
 
-    std::list<relocation_info> relocation_request;
+    std::vector<relocation_info> relocation_request;
 
     if (!queue->empty()) {
         merged_cluster->closest = *(queue->begin());

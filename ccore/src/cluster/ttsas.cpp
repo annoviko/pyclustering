@@ -51,7 +51,7 @@ void ttsas::process_objects(const std::size_t p_changes) {
         }
     }
 
-    if (p_changes == 0.0) {
+    if (p_changes == std::size_t(0)) {
         allocate_cluster(m_start, m_data_ptr->at(m_start));
         m_start++;
     }

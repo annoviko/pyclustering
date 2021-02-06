@@ -246,7 +246,7 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
     if (N != K) {
         std::vector<double> scores(analysed_centers.size(), 0.0);
 
-        sigma /= (double) (N - K);
+        sigma /= static_cast<double>(N - K);
         double p = (K - 1) + dimension * K + 1;
 
         /* splitting criterion */

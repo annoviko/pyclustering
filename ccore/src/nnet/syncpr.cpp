@@ -167,7 +167,7 @@ double syncpr::memory_order(const syncpr_pattern & input_pattern) const {
 double syncpr::calculate_memory_order(const syncpr_pattern & input_pattern) const {
     std::complex<double> order(0, 0);
 
-    for (size_t i = 0; i < size(); i++) {
+    for (std::size_t i = 0; i < size(); i++) {
         order += std::complex<double>(input_pattern[i], 0) * std::exp(std::complex<double>(0, 1) * m_oscillators[i].phase);
     }
 
@@ -177,12 +177,12 @@ double syncpr::calculate_memory_order(const syncpr_pattern & input_pattern) cons
 
 
 double syncpr::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
-    size_t oscillator_index = *(unsigned int *)argv[0];
+    std::size_t oscillator_index = *(std::size_t *)argv[0];
 
     double phase = 0.0;
     double term = 0.0;
 
-    for (size_t neighbor_index = 0; neighbor_index < size(); neighbor_index++) {
+    for (std::size_t neighbor_index = 0; neighbor_index < size(); neighbor_index++) {
         if (oscillator_index != neighbor_index) {
             double phase_delta = m_oscillators[neighbor_index].phase - m_oscillators[oscillator_index].phase;
 

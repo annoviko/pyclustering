@@ -612,7 +612,7 @@ protected:
     * @param[in]  solver: equation of phase oscillator.
     *
     */
-    virtual void set_equation(equation<double> & solver);
+    virtual void set_equation(const equation<double> & solver);
 
 private:
     /*!

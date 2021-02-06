@@ -9,6 +9,8 @@
 
 #include <pyclustering/nnet/hhn.hpp>
 
+#include <array>
+
 #include <pyclustering/differential/differ_state.hpp>
 #include <pyclustering/differential/runge_kutta_4.hpp>
 #include <pyclustering/differential/runge_kutta_fehlberg_45.hpp>
@@ -300,7 +302,7 @@ std::ostream& operator<<(std::ostream & p_stream, const hhn_dynamic & p_dynamic)
     std::set<hhn_dynamic::collect> enabled;
     p_dynamic.get_enabled(enabled);
 
-    const std::vector<hhn_dynamic::collect> order_types = {
+    const std::array<hhn_dynamic::collect, 4> order_types = {
             hhn_dynamic::collect::MEMBRANE_POTENTIAL,
             hhn_dynamic::collect::ACTIVE_COND_SODIUM,
             hhn_dynamic::collect::INACTIVE_COND_SODIUM,

@@ -136,10 +136,10 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
     m_oscillators = std::vector<sync_oscillator>(size, sync_oscillator());
     
     if (size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
-        m_connections = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(size));
+        m_connections = std::make_shared<adjacency_bit_matrix>(size);
     }
     else {
-        m_connections = std::shared_ptr<adjacency_matrix>(new adjacency_matrix(size));
+        m_connections = std::make_shared<adjacency_matrix>(size);
     }
 
     adjacency_connector<adjacency_collection> connector;
@@ -192,7 +192,7 @@ double sync_network::sync_local_order() const {
 }
 
 
-void sync_network::set_equation(equation<double> & solver) {
+void sync_network::set_equation(const equation<double> & solver) {
     m_equation = solver;
 }
 

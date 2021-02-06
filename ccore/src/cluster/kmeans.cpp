@@ -176,7 +176,7 @@ double kmeans::update_center(const cluster & p_cluster, point & p_center) {
 
     /* average for each dimension */
     for (auto & dimension : total) {
-        dimension /= p_cluster.size();
+        dimension /= static_cast<double>(p_cluster.size());
     }
 
     const double change = m_metric(p_center, total);

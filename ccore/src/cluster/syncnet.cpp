@@ -114,7 +114,7 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 
 
 double syncnet::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
-    std::size_t index = *(unsigned int *) argv[0];
+    std::size_t index = *(std::size_t *) argv[0];
     std::size_t num_neighbors = 0;
     double phase = 0;
 
@@ -140,7 +140,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
         num_neighbors = 1;
     }
 
-    phase = phase * weight / num_neighbors;
+    phase = phase * weight / static_cast<double>(num_neighbors);
     return phase;
 }
 

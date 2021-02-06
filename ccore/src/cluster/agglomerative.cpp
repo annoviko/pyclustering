@@ -103,7 +103,7 @@ void agglomerative::merge_by_average_link() {
                 }
             }
 
-            candidate_average_distance /= ((*m_ptr_clusters)[index_cluster1].size() + (*m_ptr_clusters)[index_cluster2].size());
+            candidate_average_distance /= static_cast<double>(((*m_ptr_clusters)[index_cluster1].size()) + (*m_ptr_clusters)[index_cluster2].size());
 
             if (candidate_average_distance < minimum_average_distance) {
                 minimum_average_distance = candidate_average_distance;
@@ -229,7 +229,7 @@ void agglomerative::calculate_center(const cluster & cluster, point & center) co
     }
 
     for (size_t index_dimension = 0; index_dimension < dimension; index_dimension++) {
-        center[index_dimension] /= cluster.size();
+        center[index_dimension] /= static_cast<double>(cluster.size());
     }
 }
 

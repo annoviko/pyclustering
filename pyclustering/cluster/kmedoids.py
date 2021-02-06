@@ -22,6 +22,12 @@ from pyclustering.core.wrapper import ccore_library
 from pyclustering.core.metric_wrapper import metric_wrapper
 
 
+class build:
+    """!
+    """
+
+
+
 class kmedoids:
     """!
     @brief Class represents clustering algorithm K-Medoids (PAM algorithm).

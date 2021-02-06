@@ -284,23 +284,23 @@ public:
             const int lower_left_index = index - 1 + (int) width;
             const int lower_right_index = index + 1 + (int) width;
             
-            const int node_row_index = (int) std::floor(index / width);
+            const int node_row_index = (int) std::floor(index / static_cast<int>(width));
             const int upper_row_index = node_row_index - 1;
             const int lower_row_index = node_row_index + 1;
 
-            if ((upper_left_index >= 0) && (std::floor(upper_left_index / width) == upper_row_index)) {
+            if ((upper_left_index >= 0) && (std::floor(upper_left_index / static_cast<int>(width)) == upper_row_index)) {
                 m_connector(index, upper_left_index, output_adjacency_collection);
             }
 
-            if ((upper_right_index >= 0) && (std::floor(upper_right_index / width) == upper_row_index)) {
+            if ((upper_right_index >= 0) && (std::floor(upper_right_index / static_cast<int>(width)) == upper_row_index)) {
                 m_connector(index, upper_right_index, output_adjacency_collection);
             }
 
-            if ((lower_left_index < (int) output_adjacency_collection.size()) && (std::floor(lower_left_index / width) == lower_row_index)) {
+            if ((lower_left_index < (int) output_adjacency_collection.size()) && (std::floor(lower_left_index / static_cast<int>(width)) == lower_row_index)) {
                 m_connector(index, lower_left_index, output_adjacency_collection);
             }
 
-            if ((lower_right_index < (int) output_adjacency_collection.size()) && (std::floor(lower_right_index / width) == lower_row_index)) {
+            if ((lower_right_index < (int) output_adjacency_collection.size()) && (std::floor(lower_right_index / static_cast<int>(width)) == lower_row_index)) {
                 m_connector(index, lower_right_index, output_adjacency_collection);
             }
         }

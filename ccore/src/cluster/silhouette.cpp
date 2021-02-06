@@ -62,7 +62,7 @@ void silhouette::calculate_dataset_difference(const std::size_t p_index_point, s
 
     const auto & current_point = m_data->at(p_index_point);
     for (const auto & point : *m_data) {
-        p_dataset_difference.push_back(m_metric(current_point, point));
+        p_dataset_difference.emplace_back(m_metric(current_point, point));
     }
 }
 
@@ -86,7 +86,7 @@ double silhouette::calculate_within_cluster_score(const std::size_t p_index_clus
         return std::nan("1");
     }
 
-    return score / (cluster_size - 1);
+    return score / static_cast<double>(cluster_size - 1);
 }
 
 
