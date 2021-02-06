@@ -179,7 +179,15 @@ double kmedoids::swap_medoids() {
 
     auto & medoids = m_result_ptr->medoids();
 
-    for (std::size_t index_cluster = 0; index_cluster < m_result_ptr->clusters().size(); index_cluster++) {
+    struct optimal_chunk {
+        double cost = std::numeric_limits<double>::max();
+        std::size_t index_medoid = INVALID_INDEX;
+    };
+
+    std::vector<optimal_chunk> cluster_chunks(m_result_ptr->clusters().size());
+    pyclustering::parallel::parallel_for(std::size_t(0), cluster_chunks.size(), [this, &cluster_chunks, &medoids](std::size_t index_cluster) {
+        optimal_chunk & chunk = cluster_chunks[index_cluster];
+
         for (std::size_t candidate_medoid_index = 0; candidate_medoid_index < m_data_ptr->size(); candidate_medoid_index++) {
             const bool is_already_medoid = std::find(medoids.cbegin(), medoids.cend(), candidate_medoid_index) != medoids.cend();
             if (is_already_medoid || (m_distance_first_medoid[candidate_medoid_index] == 0.0)) {
@@ -187,11 +195,19 @@ double kmedoids::swap_medoids() {
             }
 
             const double swap_cost = calculate_swap_cost(candidate_medoid_index, index_cluster);
-            if (swap_cost < optimal_swap_cost) {
-                optimal_swap_cost = swap_cost;
-                optimal_index_cluster = index_cluster;
-                optimal_index_medoid = candidate_medoid_index;
+            if (swap_cost < chunk.cost) {
+                chunk.cost = swap_cost;
+                chunk.index_medoid = candidate_medoid_index;
             }
+        }
+    });
+
+    for (std::size_t index_cluster = 0; index_cluster < cluster_chunks.size(); ++index_cluster) {
+        const optimal_chunk & chunk = cluster_chunks[index_cluster];
+        if (chunk.cost < optimal_swap_cost) {
+            optimal_swap_cost = chunk.cost;
+            optimal_index_cluster = index_cluster;
+            optimal_index_medoid = chunk.index_medoid;
         }
     }
 
@@ -204,14 +220,30 @@ double kmedoids::swap_medoids() {
 
 
 double kmedoids::calculate_swap_cost(const std::size_t p_index_candidate, const std::size_t p_index_cluster) const {
-    double cost = 0.0;
+#if PARALLEL_KMEDOIDS_CALCULATE_SWAP_COST
+    std::vector<double> point_cost(m_data_ptr->size(), 0);
+    pyclustering::parallel::parallel_for(std::size_t(0), m_data_ptr->size(), [this, &p_index_candidate, &p_index_cluster, &point_cost](std::size_t p_index) {
+        if (p_index != p_index_candidate) {
+            const double candidate_distance = m_calculator(p_index, p_index_candidate);
+            if (m_labels[p_index] == p_index_cluster) {
+                point_cost[p_index] = std::min(candidate_distance, m_distance_second_medoid[p_index]) - m_distance_first_medoid[p_index];
+            }
+            else if (candidate_distance < m_distance_first_medoid[p_index]) {
+                point_cost[p_index] = candidate_distance - m_distance_first_medoid[p_index];
+            }
+        }
+        });
 
-    for (std::size_t index_point = 0; index_point < m_data_ptr->size(); index_point++) {
+    const double cost = std::accumulate(point_cost.begin(), point_cost.end(), double(0.0));
+    return cost - m_distance_first_medoid[p_index_candidate];
+#else
+    double cost = 0.0;
+    for (std::size_t index_point = 0; index_point < m_data_ptr->size(); ++index_point) {
         if (index_point == p_index_candidate) {
             continue;
         }
 
-        double candidate_distance = m_calculator(index_point, p_index_candidate);
+        const double candidate_distance = m_calculator(index_point, p_index_candidate);
         if (m_labels[index_point] == p_index_cluster) {
             cost += std::min(candidate_distance, m_distance_second_medoid[index_point]) - m_distance_first_medoid[index_point];
         }
@@ -221,6 +253,7 @@ double kmedoids::calculate_swap_cost(const std::size_t p_index_candidate, const 
     }
 
     return cost - m_distance_first_medoid[p_index_candidate];
+#endif
 }
 
 

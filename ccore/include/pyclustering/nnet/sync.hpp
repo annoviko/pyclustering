@@ -355,6 +355,8 @@ public:
  */
 class sync_network {
 private:
+    const static std::size_t PARALLEL_RROCESSING_THRESHOLD;
+
     const static std::size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
 
 private:

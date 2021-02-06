@@ -270,6 +270,62 @@ TEST(utest_kmedoids, allocation_sample_simple_08) {
 }
 
 
+TEST(utest_kmedoids, allocation_sample_hepta) {
+    const medoid_sequence start_medoids = { 0, 35, 86, 93, 125, 171, 194 };
+    const std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_hepta_wrong_initial_01) {
+    const medoid_sequence start_medoids = { 0, 35, 16, 13, 15, 11, 24 };
+    const std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_hepta_wrong_initial_02) {
+    const medoid_sequence start_medoids = { 134, 135, 16, 123, 115, 11, 24 };
+    const std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_tetra) {
+    const medoid_sequence start_medoids = { 0, 131, 214, 265 };
+    const std::vector<size_t> expected_clusters_length = { 100, 100, 100, 100 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_tetra_wrong_initial_01) {
+    const medoid_sequence start_medoids = { 0, 200, 141, 72 };
+    const std::vector<size_t> expected_clusters_length = { 100, 100, 100, 100 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_tetra_wrong_initial_02) {
+    const medoid_sequence start_medoids = { 0, 1, 2, 3 };
+    const std::vector<size_t> expected_clusters_length = { 100, 100, 100, 100 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_tetra_wrong_initial_03) {
+    const medoid_sequence start_medoids = { 214, 216, 218, 220 };
+    const std::vector<size_t> expected_clusters_length = { 100, 100, 100, 100 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_tetra_wrong_initial_04) {
+    const medoid_sequence start_medoids = { 369, 367, 1, 2 };
+    const std::vector<size_t> expected_clusters_length = { 100, 100, 100, 100 };
+    template_kmedoids_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA), start_medoids, expected_clusters_length);
+}
+
+
 TEST(utest_kmedoids, allocation_wrong_initial_medoids_sample_simple_03) {
     const medoid_sequence start_medoids = { 4, 7, 12, 20, 25, 30, 37 };
     const std::vector<size_t> expected_clusters_length;     /* empty - just check index point existence */
@@ -329,8 +385,8 @@ TEST(utest_kmedoids, itermax_10_simple02) {
 
 #include <chrono>
 
-TEST(performance_kmedoids, big_data) {
-    const std::size_t cluster_length = 1000;
+TEST(utest_kmedoids, big_data) {
+    const std::size_t cluster_length = 100;
     const std::size_t amount_clusters = 10;
 
     auto points = simple_sample_factory::create_random_sample(cluster_length, amount_clusters);
@@ -339,7 +395,7 @@ TEST(performance_kmedoids, big_data) {
 
     auto start = std::chrono::system_clock::now();
 
-    const std::size_t repeat = 10;
+    const std::size_t repeat = 1;
     for (std::size_t i = 0; i < repeat; i++) {
       kmedoids_data output_result;
       kmedoids solver(start_medoids, 0.0001);

@@ -44,6 +44,8 @@ namespace nnet {
 
 const std::size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE      = 4096;
 
+const std::size_t sync_network::PARALLEL_RROCESSING_THRESHOLD           = 64;
+
 
 
 double sync_ordering::calculate_sync_order(const std::vector<double> & p_phases) {
@@ -282,9 +284,16 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
     std::vector<double> next_phases(size(), 0.0);
 
-    parallel_for(std::size_t(0), size(), [this, solver, t, step, int_step, &next_phases](const std::size_t p_index) {
-        calculate_phase(solver, t, step, int_step, p_index, next_phases);
-    });
+    if (size() < PARALLEL_RROCESSING_THRESHOLD) {
+        for (std::size_t index = 0; index < size(); index++) {
+            calculate_phase(solver, t, step, int_step, index, next_phases);
+        }
+    }
+    else {
+        parallel_for(std::size_t(0), size(), [this, solver, t, step, int_step, &next_phases](const std::size_t p_index) {
+            calculate_phase(solver, t, step, int_step, p_index, next_phases);
+        });
+    }
 
     /* store result */
     for (std::size_t index = 0; index < size(); index++) {
