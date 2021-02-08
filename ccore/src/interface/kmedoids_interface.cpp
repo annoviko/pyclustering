@@ -45,6 +45,9 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
     ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
     ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_MEDOIDS] = create_package(&output_result.medoids());
 
+    std::vector<std::size_t> iteration_storage(1, output_result.iterations());
+    ((pyclustering_package **)package->data)[KMEDOIDS_PACKAGE_INDEX_ITERATIONS] = create_package(&iteration_storage);
+
     return package;
 }
 

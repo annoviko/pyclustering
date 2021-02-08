@@ -166,7 +166,7 @@ class kmeans_plusplus_initializer:
         """!
         @brief Creates K-Means++ center initializer instance.
         
-        @param[in] data (array_like): List of points where each point is represented by list of coordinates.
+        @param[in] data (array_like): Points where each point is represented by list of coordinates.
         @param[in] amount_centers (uint): Amount of centers that should be initialized.
         @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points
                     (with the highest probability) should be considered as centers then special constant should be used

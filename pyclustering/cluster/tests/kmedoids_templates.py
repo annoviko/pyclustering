@@ -14,7 +14,7 @@ import numpy
 
 from pyclustering.tests.assertion import assertion
 
-from pyclustering.cluster.kmedoids import kmedoids
+from pyclustering.cluster.kmedoids import kmedoids, build
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
 from pyclustering.samples import answer_reader
@@ -226,3 +226,20 @@ class kmedoids_test_template:
                     cluster_found = True
 
             assertion.true(cluster_found, message="Actual cluster '%s' is not found among expected." % str(actual_cluster))
+
+
+    @staticmethod
+    def initialize_medoids(sample, k, expected, ccore, **kwargs):
+        data = read_sample(sample)
+
+        data_type = kwargs.get('data_type', 'points')
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+
+        if data_type == 'distance_matrix':
+            data = calculate_distance_matrix(data, metric)
+
+        initial_medoids = build(data, k, ccore, **kwargs).initialize()
+
+        assertion.eq(k, len(initial_medoids))
+        if expected is not None:
+            assertion.eq(expected, initial_medoids)

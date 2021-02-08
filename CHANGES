@@ -6,6 +6,9 @@ CHANGE NOTES FOR 0.11.0 (STARTED Nov 26, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- Introduced PAM BUILD algorithm to generate initial medoids (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::pam_build`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
 - Parallel optimization of K-Medoids (PAM) algorithm (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::kmedoids`).
   See: https://github.com/annoviko/pyclustering/issues/667
 

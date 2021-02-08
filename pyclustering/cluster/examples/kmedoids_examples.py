@@ -27,10 +27,13 @@ def template_clustering(start_medoids, path, tolerance=0.25, show=True, **kwargs
         sample = calculate_distance_matrix(sample)
 
     metric = distance_metric(type_metric.EUCLIDEAN_SQUARE, data=sample)
+
     kmedoids_instance = kmedoids(sample, start_medoids, tolerance, metric=metric, ccore=ccore, data_type=data_type)
     (ticks, result) = timedcall(kmedoids_instance.process)
     
     clusters = kmedoids_instance.get_clusters()
+    print("Iterations:", kmedoids_instance.get_iterations())
+    print([len(cluster) for cluster in clusters])
     print(clusters)
     medoids = kmedoids_instance.get_medoids()
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n")

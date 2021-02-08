@@ -82,7 +82,7 @@ void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, kme
         current_deviation = update_clusters();
     }
 
-    for (std::size_t iteration = 0; (iteration < m_itermax) && (changes > m_tolerance); iteration++) {
+    for (p_result.iterations() = 0; (p_result.iterations() < m_itermax) && (changes > m_tolerance); p_result.iterations()++) {
         const double swap_cost = swap_medoids();
 
         if (swap_cost != NOTHING_TO_SWAP) {
