@@ -55,7 +55,7 @@ public:
      * @brief Metric that is used for distance calculation between two points.
      *
      */
-    using metric = distance_functor< std::vector<double> >;
+    using metric = distance_functor<std::vector<double>>;
 
 private:
     using index_set = std::unordered_set<std::size_t>;

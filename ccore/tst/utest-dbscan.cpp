@@ -54,7 +54,7 @@ template_length_process_distance_matrix(const std::shared_ptr<dataset> & p_data,
     dataset matrix;
     distance_matrix(*p_data, matrix);
 
-    solver.process(matrix, dbscan_data_t::DISTANCE_MATRIX, *ptr_output_result);
+    solver.process(matrix, data_t::DISTANCE_MATRIX, *ptr_output_result);
 
     const dataset & data = *p_data;
     const cluster_sequence & actual_clusters = ptr_output_result->clusters();

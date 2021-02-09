@@ -46,7 +46,7 @@ pyclustering_package * silhouette_algorithm(
     }
 
     pyclustering::clst::silhouette_data result;
-    pyclustering::clst::silhouette(*metric).process(data, clusters, static_cast<pyclustering::clst::silhouette_data_t>(p_data_type), result);
+    pyclustering::clst::silhouette(*metric).process(data, clusters, static_cast<pyclustering::clst::data_t>(p_data_type), result);
 
     return create_package(&result.get_score());
 }

@@ -31,15 +31,15 @@ dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighb
 
 
 void dbscan::process(const dataset & p_data, dbscan_data & p_result) {
-    process(p_data, dbscan_data_t::POINTS, p_result);
+    process(p_data, data_t::POINTS, p_result);
 }
 
 
-void dbscan::process(const dataset & p_data, const dbscan_data_t p_type, dbscan_data & p_result) {
+void dbscan::process(const dataset & p_data, const data_t p_type, dbscan_data & p_result) {
     m_data_ptr  = &p_data;
     m_type      = p_type;
 
-    if (m_type == dbscan_data_t::POINTS) {
+    if (m_type == data_t::POINTS) {
         create_kdtree(*m_data_ptr);
     }
 
@@ -119,11 +119,11 @@ void dbscan::expand_cluster(const std::size_t p_index, cluster & allocated_clust
 
 void dbscan::get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors) {
     switch(m_type) {
-    case dbscan_data_t::POINTS:
+    case data_t::POINTS:
         get_neighbors_from_points(p_index, p_neighbors);
         break;
 
-    case dbscan_data_t::DISTANCE_MATRIX:
+    case data_t::DISTANCE_MATRIX:
         get_neighbors_from_distance_matrix(p_index, p_neighbors);
         break;
 

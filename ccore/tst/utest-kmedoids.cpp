@@ -59,7 +59,7 @@ template_kmedoids_length_process_distance_matrix(const dataset_ptr p_data,
 
     kmedoids_data output_result;
     kmedoids solver(p_start_medoids, kmedoids::DEFAULT_TOLERANCE, p_itermax, p_metric);
-    solver.process(matrix, kmedoids_data_t::DISTANCE_MATRIX, output_result);
+    solver.process(matrix, data_t::DISTANCE_MATRIX, output_result);
 
     const dataset & data = *p_data;
     const cluster_sequence & actual_clusters = output_result.clusters();

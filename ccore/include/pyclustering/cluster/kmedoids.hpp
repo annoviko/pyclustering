@@ -11,6 +11,7 @@
 
 #include <memory>
 
+#include <pyclustering/cluster/data_type.hpp>
 #include <pyclustering/cluster/kmedoids_data.hpp>
 
 #include <pyclustering/utils/metric.hpp>
@@ -22,17 +23,6 @@ using namespace pyclustering::utils::metric;
 namespace pyclustering {
 
 namespace clst {
-
-
-/*!
-
-@brief    Defines data representation (point, distance matrix) that is used for processing by K-Medoids algorithm.
-
-*/
-enum class kmedoids_data_t {
-    POINTS,
-    DISTANCE_MATRIX
-};
 
 
 /*!
@@ -145,7 +135,7 @@ public:
     @param[out] p_result: clustering result of an input data.
     
     */
-    void process(const dataset & p_data, const kmedoids_data_t p_type, kmedoids_data & p_result);
+    void process(const dataset & p_data, const data_t p_type, kmedoids_data & p_result);
 
 private:
     /*!
@@ -164,7 +154,7 @@ private:
     @return   Distance calculator.
 
     */
-    distance_calculator create_distance_calculator(const kmedoids_data_t p_type);
+    distance_calculator create_distance_calculator(const data_t p_type);
 
     /*!
     

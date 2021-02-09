@@ -171,10 +171,11 @@ class kmeans_plusplus_initializer:
         @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points
                     (with the highest probability) should be considered as centers then special constant should be used
                     'FARTHEST_CENTER_CANDIDATE'. By default the amount of candidates is 3.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'random_state').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `random_state`, `data_type`).
 
         <b>Keyword Args:</b><br>
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
+            - data_type (str): Data type of input sample `data` (`points`, `distance_matrix`).
 
         @see FARTHEST_CENTER_CANDIDATE
 
@@ -191,9 +192,10 @@ class kmeans_plusplus_initializer:
         else:
             self.__candidates = amount_candidates
 
-        self.__check_parameters()
-
         random.seed(kwargs.get('random_state', None))
+        self.__data_type = kwargs.get('data_type', 'points')
+
+        self.__check_parameters()
 
 
     def __check_parameters(self):

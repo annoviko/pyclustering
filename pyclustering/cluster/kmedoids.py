@@ -15,7 +15,8 @@ from pyclustering.cluster.encoder import type_encoding
 
 from pyclustering.utils.metric import distance_metric, type_metric
 
-import pyclustering.core.kmedoids_wrapper as wrapper
+import pyclustering.core.pam_build_wrapper as pam_build_wrapper
+import pyclustering.core.kmedoids_wrapper as kmedoids_wrapper
 
 from pyclustering.core.wrapper import ccore_library
 from pyclustering.core.metric_wrapper import metric_wrapper
@@ -89,7 +90,7 @@ class build:
 
         @param[in] data (array-like): Points where each point is represented by a list of coordinates.
         @param[in] k (uint): The amount of medoids to generate.
-        @param[in] ccore (bool): If `True` then C++ implementation is used instead of Python code.
+        @param[in] ccore (bool): If `True` then C++ implementation is used instead of Python code (by default is `True`).
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `data_type`, `metric`).
 
         <b>Keyword Args:</b><br>
@@ -120,6 +121,26 @@ class build:
 
         """
 
+        if self.__ccore is True:
+            return self.__initialize_by_ccore()
+
+        return self.__initialize_by_python()
+
+
+    def __initialize_by_ccore(self):
+        """!
+        @brief Performs processing using C/C++ pyclustering library.
+
+        """
+        ccore_metric = metric_wrapper.create_instance(self.__metric)
+        return pam_build_wrapper.pam_build(self.__data, self.__amount, ccore_metric.get_pointer(), self.__data_type)
+
+
+    def __initialize_by_python(self):
+        """!
+        @brief Performs processing using Python code.
+
+        """
         self.__medoids = []
         self.__distance_closest_medoid = [0] * len(self.__data)
 
@@ -345,7 +366,7 @@ class kmedoids:
         
         if self.__ccore is True:
             ccore_metric = metric_wrapper.create_instance(self.__metric)
-            self.__clusters, self.__medoid_indexes = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, self.__itermax, ccore_metric.get_pointer(), self.__data_type)
+            self.__clusters, self.__medoid_indexes = kmedoids_wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, self.__itermax, ccore_metric.get_pointer(), self.__data_type)
         
         else:
             changes = float('inf')

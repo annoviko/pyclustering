@@ -58,11 +58,11 @@ kmedoids::~kmedoids() { }
 
 
 void kmedoids::process(const dataset & p_data, kmedoids_data & p_result) {
-    process(p_data, kmedoids_data_t::POINTS, p_result);
+    process(p_data, data_t::POINTS, p_result);
 }
 
 
-void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, kmedoids_data & p_result) {
+void kmedoids::process(const dataset & p_data, const data_t p_type, kmedoids_data & p_result) {
     m_data_ptr = &p_data;
     m_result_ptr = (kmedoids_data *) &p_result;
     m_calculator = create_distance_calculator(p_type);
@@ -131,13 +131,13 @@ double kmedoids::update_clusters() {
 }
 
 
-kmedoids::distance_calculator kmedoids::create_distance_calculator(const kmedoids_data_t p_type) {
-    if (p_type == kmedoids_data_t::POINTS) {
+kmedoids::distance_calculator kmedoids::create_distance_calculator(const data_t p_type) {
+    if (p_type == data_t::POINTS) {
         return [this](const std::size_t index1, const std::size_t index2) {
           return m_metric((*m_data_ptr)[index1], (*m_data_ptr)[index2]); 
         };
     }
-    else if (p_type == kmedoids_data_t::DISTANCE_MATRIX) {
+    else if (p_type == data_t::DISTANCE_MATRIX) {
         return [this](const std::size_t index1, const std::size_t index2) {
           return (*m_data_ptr)[index1][index2];
         };

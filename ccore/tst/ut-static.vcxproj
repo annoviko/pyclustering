@@ -216,6 +216,7 @@
     <ClCompile Include="..\tst\utest-utils-algorithm.cpp" />
     <ClCompile Include="..\tst\utest-utils-metric.cpp" />
     <ClCompile Include="..\tst\utest-xmeans.cpp" />
+    <ClCompile Include="utest-pam_build.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tst\answer.hpp" />

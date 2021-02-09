@@ -39,7 +39,7 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
     p_sample->extract(input_dataset);
 
     pyclustering::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, (pyclustering::clst::kmedoids_data_t) p_type, output_result);
+    algorithm.process(input_dataset, (pyclustering::clst::data_t) p_type, output_result);
 
     pyclustering_package * package = create_package_container(KMEDOIDS_PACKAGE_SIZE);
     ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());

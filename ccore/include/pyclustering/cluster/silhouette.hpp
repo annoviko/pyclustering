@@ -10,6 +10,7 @@
 
 
 #include <pyclustering/cluster/cluster_data.hpp>
+#include <pyclustering/cluster/data_type.hpp>
 #include <pyclustering/cluster/silhouette_data.hpp>
 
 #include <pyclustering/definitions.hpp>
@@ -23,17 +24,6 @@ using namespace pyclustering::utils::metric;
 namespace pyclustering {
 
 namespace clst {
-
-
-/*!
-
-@brief Defines types that are used for input data representation.
-
-*/
-enum class silhouette_data_t {
-    POINTS,
-    DISTANCE_MATRIX
-};
 
 
 /*!
@@ -111,7 +101,7 @@ private:
     const cluster_sequence *  m_clusters  = nullptr;  /* temporary object, exists during processing */
     silhouette_data *         m_result    = nullptr;  /* temporary object, exists during processing */
 
-    silhouette_data_t         m_type      = silhouette_data_t::POINTS;
+    data_t                    m_type      = data_t::POINTS;
 
     distance_metric<point>    m_metric    = distance_metric_factory<point>::euclidean_square();
 
@@ -176,7 +166,7 @@ public:
     @param[out] p_result: silhouette input data processing result.
 
     */
-    void process(const dataset & p_data, const cluster_sequence & p_clusters, const silhouette_data_t & p_type, silhouette_data & p_result);
+    void process(const dataset & p_data, const cluster_sequence & p_clusters, const data_t & p_type, silhouette_data & p_result);
 
 private:
     double calculate_score(const std::size_t p_index_point, const std::size_t p_index_cluster) const;

@@ -94,6 +94,9 @@
     <ClCompile Include="answer_reader.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="utest-interface-pam_build.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="samples.hpp">
