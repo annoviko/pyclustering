@@ -16,6 +16,8 @@ import numpy
 import random
 import warnings
 
+from pyclustering.utils.metric import distance_metric, type_metric
+
 
 class random_center_initializer:
     """!
@@ -171,11 +173,12 @@ class kmeans_plusplus_initializer:
         @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points
                     (with the highest probability) should be considered as centers then special constant should be used
                     'FARTHEST_CENTER_CANDIDATE'. By default the amount of candidates is 3.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `random_state`, `data_type`).
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `random_state`, `data_type`, `metric`).
 
         <b>Keyword Args:</b><br>
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
             - data_type (str): Data type of input sample `data` (`points`, `distance_matrix`).
+            - metric (distance_metric): Metric that is used for distance calculation between two points.
 
         @see FARTHEST_CENTER_CANDIDATE
 
@@ -192,9 +195,14 @@ class kmeans_plusplus_initializer:
         else:
             self.__candidates = amount_candidates
 
-        random.seed(kwargs.get('random_state', None))
+        random_seed = kwargs.get('random_state', None)
+        numpy.random.seed(random_seed)
+        random.seed(random_seed)
+
+        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         self.__data_type = kwargs.get('data_type', 'points')
 
+        self.__metric.enable_numpy_usage()
         self.__check_parameters()
 
 
@@ -231,7 +239,10 @@ class kmeans_plusplus_initializer:
         for index_center in range(len(centers)):
             center = data[centers[index_center]]
 
-            dataset_differences[index_center] = numpy.sum(numpy.square(data - center), axis=1).T
+            if self.__data_type == 'points':
+                dataset_differences[index_center] = self.__metric(data, center)
+            elif self.__data_type == 'distance_matrix':
+                dataset_differences[index_center] = numpy.array(self.__data[centers[index_center]])
 
         with warnings.catch_warnings():
             numpy.warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')

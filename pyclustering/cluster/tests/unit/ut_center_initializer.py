@@ -23,7 +23,7 @@ from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
-from pyclustering.utils import read_sample
+from pyclustering.utils import read_sample, calculate_distance_matrix, type_metric, distance_metric
 
 from pyclustering.tests.assertion import assertion
 
@@ -271,37 +271,49 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
         self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 23, 10)
 
 
-    def templateKmeansPlusPlusSeveralRuns(self, path_sample, amount, candidates):
-        sample = read_sample(path_sample)
+    def template_compare_output(self, path, k, candidates, random_state, metric):
+        sample = read_sample(path)
+        matrix = calculate_distance_matrix(sample, metric=metric)
 
-        attempts = 10
-        for _ in range(attempts):
-            medoids = kmeans_plusplus_initializer(sample, amount, candidates).initialize(return_index=True)
-            medoids += kmeans_plusplus_initializer(sample, amount, candidates).initialize(return_index=True)
-            medoids += kmeans_plusplus_initializer(sample, amount, candidates).initialize(return_index=True)
+        result1 = kmeans_plusplus_initializer(sample, k, candidates, random_state=random_state, data_type='points', metric=metric).initialize(return_index=True)
+        result2 = kmeans_plusplus_initializer(matrix, k, candidates, random_state=random_state, data_type='distance_matrix', metric=metric).initialize(return_index=True)
 
-            unique_medoids = set(medoids)
-            if len(unique_medoids) != len(medoids):
-                continue
+        assertion.eq(result1, result2)
 
-            return
+    def test_various_data_type_simple1(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 4, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
 
-        self.assertTrue(False, "K-Means++ does not return unique medoids during %d attempts." % attempts)
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 3, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, 3, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 4, 3, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
 
-    def templateKmeansPlusPlusVariousCentersSimple01(self):
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1)
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 1)
+    def test_various_data_type_simple1_euclidean(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 1000, distance_metric(type_metric.EUCLIDEAN))
 
-    def templateKmeansPlusPlusVariousCentersSeveralCandidatesSimple01(self):
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 3)
+    def test_various_data_type_simple1_euclidean_square(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
 
-    def templateKmeansPlusPlusVariousCentersFarthestCandidatesSimple01(self):
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 'farthest')
+    def test_various_data_type_simple1_euclidean_manhattan(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 1000, distance_metric(type_metric.MANHATTAN))
 
-    def templateKmeansPlusPlusVariousCentersSimple02(self):
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1)
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 6, 1)
+    def test_various_data_type_simple1_euclidean_chebyshev(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 1000, distance_metric(type_metric.CHEBYSHEV))
 
-    def templateKmeansPlusPlusVariousCentersSimple03(self):
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 4, 1)
-        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 8, 1)
+    def test_various_data_type_simple2(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 5, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+
+    def test_various_data_type_simple3(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, 5, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+
+    def test_various_data_type_simple4(self):
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, 2, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, 5, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+
+    def test_various_data_type_simple5(self):
+        for i in range(10):
+            self.template_compare_output(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, i + 2, 1, 1000, distance_metric(type_metric.EUCLIDEAN_SQUARE))

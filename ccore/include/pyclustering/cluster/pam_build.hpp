@@ -106,7 +106,7 @@ public:
     @param[in] p_amount: amount of medoids that should be initialized.
 
     */
-    pam_build(const std::size_t p_amount);
+    explicit pam_build(const std::size_t p_amount);
 
     /*
 
