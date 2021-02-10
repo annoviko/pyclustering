@@ -29,24 +29,6 @@ cluster & cluster_data::operator[](const size_t p_index) { return m_clusters[p_i
 const cluster & cluster_data::operator[](const size_t p_index) const { return m_clusters[p_index]; }
 
 
-cluster_data & cluster_data::operator=(const cluster_data & p_other) {
-    if (this != &p_other) {
-        m_clusters = p_other.m_clusters;
-    }
-
-    return *this;
-}
-
-
-cluster_data & cluster_data::operator=(cluster_data && p_other) {
-    if (this != &p_other) {
-        m_clusters = std::move(p_other.m_clusters);
-    }
-
-    return *this;
-}
-
-
 bool cluster_data::operator==(const cluster_data & p_other) const {
     return (m_clusters == p_other.m_clusters);
 }

@@ -10,6 +10,7 @@
 #include <pyclustering/nnet/hhn.hpp>
 
 #include <array>
+#include <cstdint>
 
 #include <pyclustering/differential/differ_state.hpp>
 #include <pyclustering/differential/runge_kutta_4.hpp>
@@ -311,10 +312,10 @@ std::ostream& operator<<(std::ostream & p_stream, const hhn_dynamic & p_dynamic)
         }
     };
 
-    p_stream << p_dynamic.size_dynamic() << " " << p_dynamic.size_network() << "\n";
+    p_stream << static_cast<std::uint64_t>(p_dynamic.size_dynamic()) << " " << static_cast<std::uint64_t>(p_dynamic.size_network()) << "\n";
     for (std::size_t index_order = 0; index_order < order_types.size(); index_order++) {
         if (enabled.find(order_types[index_order]) != enabled.cend()) {
-            p_stream << index_order << " ";
+            p_stream << static_cast<std::uint64_t>(index_order) << " ";
         }
     }
     p_stream << "\n";

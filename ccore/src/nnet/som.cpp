@@ -512,9 +512,9 @@ double som::calculate_init_radius(const size_t p_rows, const size_t p_cols) {
 
 
 std::ostream & operator<<(std::ostream & p_stream, const som & p_network) {
-    p_stream << p_network.m_rows << "\n";
-    p_stream << p_network.m_cols << "\n";
-    p_stream << (unsigned) p_network.m_conn_type << "\n";
+    p_stream << static_cast<std::uint64_t>(p_network.m_rows) << "\n";
+    p_stream << static_cast<std::uint64_t>(p_network.m_cols) << "\n";
+    p_stream << static_cast<std::uint64_t>(p_network.m_conn_type) << "\n";
     p_stream << pyclustering::to_string(p_network.m_weights) << "\n";
     p_stream << pyclustering::to_string(p_network.m_awards) << "\n";
     p_stream << pyclustering::to_string(p_network.m_location) << "\n";

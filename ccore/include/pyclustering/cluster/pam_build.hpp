@@ -11,6 +11,7 @@
 
 
 #include <functional>
+#include <numeric>
 #include <vector>
 
 #include <pyclustering/cluster/data_type.hpp>
@@ -72,6 +73,9 @@ an illustration where initial medoids are obtained for various samples (initial 
 
 */
 class pam_build {
+private:
+    constexpr static std::size_t INVALID_MEDOID = std::numeric_limits<std::size_t>::max();
+
 private:
     using metric = distance_functor<std::vector<double>>;
 

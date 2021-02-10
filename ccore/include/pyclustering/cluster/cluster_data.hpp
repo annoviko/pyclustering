@@ -115,24 +115,6 @@ public:
 
     /*!
     
-    @brief    Set clustering data by copy it from another object.
-    
-    @param[in] p_other: another clustering data.
-    
-    */
-    cluster_data & operator=(const cluster_data & p_other);
-
-    /*!
-    
-    @brief    Set clustering data by move it from another object.
-    
-    @param[in] p_other: another clustering data.
-    
-    */
-    cluster_data & operator=(cluster_data && p_other);
-
-    /*!
-    
     @brief    Compares clustering data.
     
     @param[in] p_other: another clustering data that is used for comparison.

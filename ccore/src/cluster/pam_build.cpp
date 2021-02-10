@@ -49,7 +49,7 @@ void pam_build::initialize(const dataset & p_data, const data_t p_type, const me
 
 void pam_build::calculate_first_medoid() const {
     double optimal_deviation = std::numeric_limits<double>::max();
-    std::size_t optimal_medoid = std::size_t(-1);
+    std::size_t optimal_medoid = INVALID_MEDOID;
 
     std::vector<double> current_distances(m_data_ptr->size());
 
@@ -73,7 +73,7 @@ void pam_build::calculate_first_medoid() const {
         }
     }
 
-    if (optimal_medoid == std::size_t(-1)) {
+    if (optimal_medoid == INVALID_MEDOID) {
         throw std::logic_error("Impossible to calculate the first medoid.");
     }
 
@@ -88,7 +88,7 @@ void pam_build::calculate_next_medoids() const {
     std::unordered_set<std::size_t> non_available = { m_medoids_ptr->at(0) };
 
     while (m_medoids_ptr->size() < m_amount) {
-        std::size_t optimal_medoid = std::size_t(-1);
+        std::size_t optimal_medoid = INVALID_MEDOID;
         double optimal_deviation = std::numeric_limits<double>::max();
 
         for (std::size_t i = 0; i < m_data_ptr->size(); i++) {
@@ -115,7 +115,7 @@ void pam_build::calculate_next_medoids() const {
             }
         }
 
-        if (optimal_medoid == -1) {
+        if (optimal_medoid == INVALID_MEDOID) {
             throw std::logic_error("Impossible to calculate the next medoid (medoid number: '" + std::to_string(m_medoids_ptr->size() + 1) + "').");
         }
 

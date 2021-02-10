@@ -232,21 +232,21 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
     double score = std::numeric_limits<double>::max();
     double dimension = (double) analysed_centers[0].size();
     double sigma = 0.0;
-    std::size_t K = analysed_centers.size();
-    std::size_t N = 0;
+    double K = static_cast<double>(analysed_centers.size());
+    double N = 0;
 
     for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
         for (auto & index_object : analysed_clusters[index_cluster]) {
             sigma += m_metric((*m_ptr_data)[index_object], analysed_centers[index_cluster]);
         }
 
-        N += analysed_clusters[index_cluster].size();
+        N += static_cast<double>(analysed_clusters[index_cluster].size());
     }
 
     if (N != K) {
         std::vector<double> scores(analysed_centers.size(), 0.0);
 
-        sigma /= static_cast<double>(N - K);
+        sigma /= N - K;
         double p = (K - 1) + dimension * K + 1;
 
         /* splitting criterion */
