@@ -6,6 +6,15 @@ CHANGE NOTES FOR 0.11.0 (STARTED Nov 26, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- Supported `get_total_deviation()` method for K-Medoids to obtain the final loss after the optimization - the total deviation (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
+- Supported `get_iterations()` medoid for K-Medoids to obtain the amount of iteration that was performed during cluster analysis (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
+- Supported `get_labels()` method for K-Medoids to obtain cluster labels (Python: `pyclustering.cluster.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
 - Supported `distance_matrix` data type for K-Means++ (Python: `pyclustering.cluster.center_initializer`).
   See: https://github.com/annoviko/pyclustering/issues/622
 

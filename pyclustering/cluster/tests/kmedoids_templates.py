@@ -104,6 +104,12 @@ class kmedoids_test_template:
 
             assertion.eq_float(expected_total_deviation, kmedoids_instance.get_total_deviation(), 0.000001)
 
+            labels = kmedoids_instance.get_labels()
+            assertion.eq(len(sample), len(labels))
+            for index_point in range(len(labels)):
+                actual_index_cluster = labels[index_point]
+                assertion.true(index_point in clusters[actual_index_cluster])
+
             testing_result = True
 
         assertion.true(testing_result)

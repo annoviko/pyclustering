@@ -243,9 +243,61 @@ class kmedoids:
               algorithm. Medoid is an object with the smallest dissimilarity to all others in the cluster. PAM algorithm
               complexity is \f$O\left ( k\left ( n-k \right )^{2} \right )\f$.
 
+              The performance of the algorithm depends on initial medoids and it is recommended to use BUILD PAM
+              initialization algorithm for that purpose. K-Means++ is also could be considered as an initialization
+              algorithm with smaller complexity `O(nk)`, but produces a worse starting point.
+
     Implementation based on paper @cite inproceedings::cluster::kmedoids::1.
 
-    There is an example where PAM algorithm is used to cluster 'TwoDiamonds' data:
+    There is an example where PAM algorithm is used to cluster `Tetra` data where PAM BUILD algorithm is used to
+    initialize medoids:
+    @code
+        from pyclustering.cluster.kmedoids import kmedoids, build
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Load list of points `Tetra` for cluster analysis.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TETRA)
+
+        # Initialize initial medoids using PAM BUILD algorithm
+        initial_medoids = build(sample, 4).initialize()
+
+        # Create instance of K-Medoids (PAM) algorithm.
+        kmedoids_instance = kmedoids(sample, initial_medoids)
+
+        # Run cluster analysis
+        kmedoids_instance.process()
+
+        # Display clustering results to console.
+        print("Clusters:", kmedoids_instance.get_clusters())
+        print("Labels:", kmedoids_instance.get_labels())
+        print("Medoids:", kmedoids_instance.get_medoids())
+        print("Total Deviation:", kmedoids_instance.get_total_deviation())
+        print("Iterations:", kmedoids_instance.get_iterations())
+
+        # Display clustering results.
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(kmedoids_instance.get_clusters(), sample)
+        visualizer.append_cluster(initial_medoids, sample, markersize=120, marker='*', color='dimgray')
+        visualizer.append_cluster(kmedoids_instance.get_medoids(), sample, markersize=120, marker='*', color='black')
+        visualizer.show()
+    @endcode
+
+    The following clustering results are expected in a console:
+    @code
+        Clusters: [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99], [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199], [200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299], [300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399]]
+        Labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+        Medoids: [0, 100, 201, 300]
+        Total Deviation: 239.25250279395595
+        Iterations: 3
+    @endcode
+
+    And the following visualization is expected:
+    @image html pam_clustering_tetra.png "Fig. 1. K-Medoids (PAM) clustering results `Tetra` (PAM BUILD initialization)."
+
+    There is an example where PAM algorithm is used to cluster `TwoDiamonds` data where K-Means++ algorithm is used
+    to initialize medoids:
     @code
         from pyclustering.cluster.kmedoids import kmedoids
         from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
@@ -278,9 +330,9 @@ class kmedoids:
         visualizer.show()
     @endcode
 
-    @image html pam_clustering_two_diamonds.png "Fig. 1. K-Medoids (PAM) clustering results 'TwoDiamonds'."
+    @image html pam_clustering_two_diamonds.png "Fig. 2. K-Medoids (PAM) clustering results `TwoDiamonds` (K-Means++ initialization)."
 
-    Metric for calculation distance between points can be specified by parameter additional 'metric':
+    Metric for calculation distance between points can be specified by parameter additional `metric`:
     @code
         # create Minkowski distance metric with degree equals to '2'
         metric = distance_metric(type_metric.MINKOWSKI, degree=2)
@@ -293,7 +345,7 @@ class kmedoids:
         clusters = kmedoids_instance.get_clusters()
     @endcode
 
-    Distance matrix can be used instead of sequence of points to increase performance and for that purpose parameter 'data_type' should be used:
+    Distance matrix can be used instead of sequence of points to increase performance and for that purpose parameter `data_type` should be used:
     @code
         # calculate distance matrix for sample
         sample = read_sample(path_to_sample)
@@ -308,6 +360,8 @@ class kmedoids:
         clusters = kmedoids_instance.get_clusters()
         medoids = kmedoids_instance.get_medoids()
     @endcode
+
+    @see pam_build
 
     """
     
@@ -368,7 +422,12 @@ class kmedoids:
         if self.__ccore is True:
             ccore_metric = metric_wrapper.create_instance(self.__metric)
             self.__clusters, self.__medoid_indexes, self.__iterations, self.__total_deviation = kmedoids_wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, self.__itermax, ccore_metric.get_pointer(), self.__data_type)
-        
+
+            # TODO: calculate it on C++ side as well
+            for index_cluster in range(len(self.__clusters)):
+                for index_point in self.__clusters[index_cluster]:
+                    self.__labels[index_point] = index_cluster
+
         else:
             changes = float('inf')
             previous_deviation, self.__total_deviation = float('inf'), 0
