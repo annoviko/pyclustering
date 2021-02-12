@@ -210,6 +210,9 @@
     <ClCompile Include="utils\stats.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\pam_build.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pyclustering\cluster\agglomerative.hpp">
@@ -463,6 +466,12 @@
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\nnet\syncpr.hpp">
       <Filter>Header Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pyclustering\cluster\data_type.hpp">
+      <Filter>Header Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pyclustering\cluster\pam_build.hpp">
+      <Filter>Header Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

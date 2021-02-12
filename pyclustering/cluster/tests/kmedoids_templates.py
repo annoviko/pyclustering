@@ -14,7 +14,7 @@ import numpy
 
 from pyclustering.tests.assertion import assertion
 
-from pyclustering.cluster.kmedoids import kmedoids
+from pyclustering.cluster.kmedoids import kmedoids, build
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
 from pyclustering.samples import answer_reader
@@ -44,7 +44,7 @@ class kmedoids_test_template:
 
         input_data = sample
         if data_type == 'distance_matrix':
-            input_data = calculate_distance_matrix(sample)
+            input_data = calculate_distance_matrix(sample, metric)
 
             if input_type == 'numpy':
                 input_data = numpy.array(input_data)
@@ -65,6 +65,8 @@ class kmedoids_test_template:
             medoids = kmedoids_instance.get_medoids()
 
             if itermax == 0:
+                assertion.eq(0, kmedoids_instance.get_iterations())
+                assertion.eq(0.0, kmedoids_instance.get_total_deviation())
                 assertion.eq([], clusters)
                 assertion.eq(medoids, initial_medoids)
                 return
@@ -88,6 +90,25 @@ class kmedoids_test_template:
                 expected_cluster_length.sort()
                 if obtained_cluster_sizes != expected_cluster_length:
                     continue
+
+            assertion.gt(kmedoids_instance.get_iterations(), 0)
+
+            expected_total_deviation = 0.0
+            for index_cluster in range(len(clusters)):
+                index_point_medoid = medoids[index_cluster]
+                for index_point in clusters[index_cluster]:
+                    if index_point == index_point_medoid:
+                        continue
+
+                    expected_total_deviation += metric(sample[index_point_medoid], sample[index_point])
+
+            assertion.eq_float(expected_total_deviation, kmedoids_instance.get_total_deviation(), 0.000001)
+
+            labels = kmedoids_instance.get_labels()
+            assertion.eq(len(sample), len(labels))
+            for index_point in range(len(labels)):
+                actual_index_cluster = labels[index_point]
+                assertion.true(index_point in clusters[actual_index_cluster])
 
             testing_result = True
 
@@ -226,3 +247,20 @@ class kmedoids_test_template:
                     cluster_found = True
 
             assertion.true(cluster_found, message="Actual cluster '%s' is not found among expected." % str(actual_cluster))
+
+
+    @staticmethod
+    def initialize_medoids(sample, k, expected, ccore, **kwargs):
+        data = read_sample(sample)
+
+        data_type = kwargs.get('data_type', 'points')
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+
+        if data_type == 'distance_matrix':
+            data = calculate_distance_matrix(data, metric)
+
+        initial_medoids = build(data, k, ccore, **kwargs).initialize()
+
+        assertion.eq(k, len(initial_medoids))
+        if expected is not None:
+            assertion.eq(expected, initial_medoids)

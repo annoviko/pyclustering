@@ -20,11 +20,11 @@ silhouette::silhouette(const distance_metric<point> & p_metric) :
 
 
 void silhouette::process(const dataset & p_data, const cluster_sequence & p_clusters, silhouette_data & p_result) {
-    process(p_data, p_clusters, silhouette_data_t::POINTS, p_result);
+    process(p_data, p_clusters, data_t::POINTS, p_result);
 }
 
 
-void silhouette::process(const dataset & p_data, const cluster_sequence & p_clusters, const silhouette_data_t & p_type, silhouette_data & p_result) {
+void silhouette::process(const dataset & p_data, const cluster_sequence & p_clusters, const data_t & p_type, silhouette_data & p_result) {
     m_data      = &p_data;
     m_clusters  = &p_clusters;
     m_result    = &p_result;
@@ -53,7 +53,7 @@ double silhouette::calculate_score(const std::size_t p_index_point, const std::s
 
 
 void silhouette::calculate_dataset_difference(const std::size_t p_index_point, std::vector<double> & p_dataset_difference) const {
-    if (m_type == silhouette_data_t::DISTANCE_MATRIX) {
+    if (m_type == data_t::DISTANCE_MATRIX) {
         p_dataset_difference = m_data->at(p_index_point);
         return;
     }
@@ -62,7 +62,7 @@ void silhouette::calculate_dataset_difference(const std::size_t p_index_point, s
 
     const auto & current_point = m_data->at(p_index_point);
     for (const auto & point : *m_data) {
-        p_dataset_difference.push_back(m_metric(current_point, point));
+        p_dataset_difference.emplace_back(m_metric(current_point, point));
     }
 }
 
@@ -86,7 +86,7 @@ double silhouette::calculate_within_cluster_score(const std::size_t p_index_clus
         return std::nan("1");
     }
 
-    return score / (cluster_size - 1);
+    return score / static_cast<double>(cluster_size - 1);
 }
 
 

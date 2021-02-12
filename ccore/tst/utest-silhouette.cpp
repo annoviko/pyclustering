@@ -38,8 +38,8 @@ void template_correct_score_data_types(const dataset_ptr & p_data, const answer 
     dataset matrix;
     distance_matrix(*p_data, distance_metric_factory<point>::euclidean_square(), matrix);
 
-    silhouette().process(*p_data, p_answer.clusters(), silhouette_data_t::POINTS, result_points);
-    silhouette().process(matrix, p_answer.clusters(), silhouette_data_t::DISTANCE_MATRIX, result_matrix);
+    silhouette().process(*p_data, p_answer.clusters(), data_t::POINTS, result_points);
+    silhouette().process(matrix, p_answer.clusters(), data_t::DISTANCE_MATRIX, result_matrix);
 
     ASSERT_EQ(p_data->size(), result_points.get_score().size());
     ASSERT_EQ(p_data->size(), result_matrix.get_score().size());

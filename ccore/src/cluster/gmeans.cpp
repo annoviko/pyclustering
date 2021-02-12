@@ -58,10 +58,6 @@ void gmeans::process(const dataset & p_data, gmeans_data & p_result) {
     m_ptr_data = &p_data;
     m_ptr_result = &p_result;
 
-    if (!m_ptr_result) {
-        throw std::invalid_argument("Invalid result storage is specified: impossible to cast to 'gmeans_data'.");
-    }
-
     search_optimal_parameters(p_data, m_amount, m_ptr_result->clusters(), m_ptr_result->centers());
 
     while(is_run_condition()) {

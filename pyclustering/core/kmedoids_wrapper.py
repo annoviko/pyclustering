@@ -29,4 +29,4 @@ def kmedoids(sample, medoids, tolerance, itermax, metric_pointer, data_type):
     result = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)
 
-    return result[0], result[1]
+    return result[0], result[1], result[2][0], result[3][0]

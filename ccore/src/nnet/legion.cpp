@@ -254,7 +254,7 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 
 
 void legion_network::neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    unsigned int index = *(unsigned int *) argv[0];
+    std::size_t index = *(std::size_t *) argv[0];
 
     const double x = inputs[0];
     const double y = inputs[1];
@@ -307,10 +307,10 @@ void legion_network::initialize(const size_t num_osc, const connection_t connect
     }
 
     if (num_osc > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
-        m_static_connections = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(num_osc));
+        m_static_connections = std::make_shared<adjacency_bit_matrix>(num_osc);
     }
     else {
-        m_static_connections = std::shared_ptr<adjacency_matrix>(new adjacency_matrix(num_osc));
+        m_static_connections = std::make_shared<adjacency_matrix>(num_osc);
     }
 
     adjacency_connector<adjacency_collection> connector;

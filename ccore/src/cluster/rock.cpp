@@ -45,7 +45,7 @@ void rock::process(const dataset & p_data, rock_data & p_result) {
 
     /* initialize first version of clusters */
     for (size_t index = 0; index < p_data.size(); index++) {
-        m_clusters.push_back(cluster(1, index));
+        m_clusters.emplace_back(1, index);
     }
 
     while( (m_number_clusters < m_clusters.size()) && (merge_cluster()) ) { }

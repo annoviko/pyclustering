@@ -15,6 +15,7 @@
 
 #include <pyclustering/container/kdtree_balanced.hpp>
 
+#include <pyclustering/cluster/data_type.hpp>
 #include <pyclustering/cluster/optics_data.hpp>
 #include <pyclustering/cluster/optics_descriptor.hpp>
 
@@ -22,17 +23,6 @@
 namespace pyclustering {
 
 namespace clst {
-
-
-/*!
-
-@brief Enumeration of input data type that are processed by OPTICS algorithm.
-
-*/
-enum class optics_data_t {
-    POINTS,             /**< Data is represented by a container of points. */
-    DISTANCE_MATRIX     /**< Data is represented by a distance matrix between points. */
-};
 
 
 /*!
@@ -83,7 +73,7 @@ private:
 
     std::size_t         m_amount_clusters   = 0;
 
-    optics_data_t       m_type              = optics_data_t::POINTS;
+    data_t              m_type              = data_t::POINTS;
 
     container::kdtree_balanced      m_kdtree            = container::kdtree_balanced();
 
@@ -166,7 +156,7 @@ public:
                  cluster-ordering, noise and proper connectivity radius).
 
     */
-    void process(const dataset & p_data, const optics_data_t p_type, optics_data & p_result);
+    void process(const dataset & p_data, const data_t p_type, optics_data & p_result);
 
 private:
     void initialize();

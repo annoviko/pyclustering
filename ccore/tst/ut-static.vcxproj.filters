@@ -152,6 +152,9 @@
     <ClCompile Include="..\tst\utenv_utils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="utest-pam_build.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tst\utest-adjacency.hpp">

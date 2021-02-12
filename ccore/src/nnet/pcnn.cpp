@@ -172,10 +172,10 @@ void pcnn::initilize(const size_t p_size, const connection_t p_structure, const 
     m_oscillators = std::vector<pcnn_oscillator>(p_size, pcnn_oscillator());
     
     if (p_size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
-        m_connection = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(p_size));
+        m_connection = std::make_shared<adjacency_bit_matrix>(p_size);
     }
     else {
-        m_connection = std::shared_ptr<adjacency_matrix>(new adjacency_matrix(p_size));
+        m_connection = std::make_shared<adjacency_matrix>(p_size);
     }
 
     adjacency_connector<adjacency_collection> connector;

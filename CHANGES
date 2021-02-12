@@ -6,6 +6,24 @@ CHANGE NOTES FOR 0.11.0 (STARTED Nov 26, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- Supported `get_total_deviation()` method for K-Medoids to obtain the final loss after the optimization - the total deviation (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
+- Supported `get_iterations()` medoid for K-Medoids to obtain the amount of iteration that was performed during cluster analysis (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
+- Supported `get_labels()` method for K-Medoids to obtain cluster labels (Python: `pyclustering.cluster.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
+- Supported `distance_matrix` data type for K-Means++ (Python: `pyclustering.cluster.center_initializer`).
+  See: https://github.com/annoviko/pyclustering/issues/622
+
+- Introduced PAM BUILD algorithm to generate initial medoids (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::pam_build`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
+- Parallel optimization of K-Medoids (PAM) algorithm (Python: `pyclustering.cluster.kmedoids`, C++: `pyclustering::clst::kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/667
+
 - Introduced `close()` methods for visualizers (Python: `pyclustering`).
   See: https://github.com/annoviko/pyclustering/issues/470
 
@@ -14,6 +32,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+
+- Corrected bug with `parallel_for` when it was using sequential approach (C++: `pyclustering::parallel::parallel_for`).
+  See: https://github.com/annoviko/pyclustering/issues/665
 
 - Corrected failures in CNN visualizer methods `show_dynamic_matrix()` and `show_observation_matrix()` in case of matplotlib `3.3.3` (Python: `pyclustering.nnet.cnn`).
   See: https://github.com/annoviko/pyclustering/issues/663 

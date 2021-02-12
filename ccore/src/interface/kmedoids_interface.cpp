@@ -22,6 +22,7 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
                                           const std::size_t p_itermax,
                                           const void * const p_metric,
                                           const std::size_t p_type)
+try 
 {
     pyclustering::clst::medoid_sequence medoids;
     p_medoids->extract(medoids);
@@ -39,12 +40,20 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
     p_sample->extract(input_dataset);
 
     pyclustering::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, (pyclustering::clst::kmedoids_data_t) p_type, output_result);
+    algorithm.process(input_dataset, (pyclustering::clst::data_t) p_type, output_result);
 
     pyclustering_package * package = create_package_container(KMEDOIDS_PACKAGE_SIZE);
     ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
     ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_MEDOIDS] = create_package(&output_result.medoids());
 
+    std::vector<std::size_t> iteration_storage(1, output_result.iterations());
+    ((pyclustering_package **)package->data)[KMEDOIDS_PACKAGE_INDEX_ITERATIONS] = create_package(&iteration_storage);
+
+    std::vector<double> total_deviation_storage(1, output_result.total_deviation());
+    ((pyclustering_package **)package->data)[KMEDOIDS_PACKAGE_INDEX_TOTAL_DEVIATION] = create_package(&total_deviation_storage);
+
     return package;
 }
-
+catch (std::exception & p_exception) {
+    return create_package(p_exception.what());
+}

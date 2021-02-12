@@ -42,11 +42,11 @@ optics::optics(const double p_radius, const std::size_t p_neighbors, const std::
 
 
 void optics::process(const dataset & p_data, optics_data & p_result) {
-    process(p_data, optics_data_t::POINTS, p_result);
+    process(p_data, data_t::POINTS, p_result);
 }
 
 
-void optics::process(const dataset & p_data, const optics_data_t p_type, optics_data & p_result) {
+void optics::process(const dataset & p_data, const data_t p_type, optics_data & p_result) {
     m_data_ptr    = &p_data;
     m_result_ptr  = &p_result;
     m_type        = p_type;
@@ -77,7 +77,7 @@ void optics::calculate_cluster_result() {
 
 
 void optics::initialize() {
-    if (m_type == optics_data_t::POINTS) {
+    if (m_type == data_t::POINTS) {
         create_kdtree();
     }
 
@@ -205,11 +205,11 @@ void optics::extract_clusters() {
 
 void optics::get_neighbors(const size_t p_index, neighbors_collection & p_neighbors) {
     switch(m_type) {
-    case optics_data_t::POINTS:
+    case data_t::POINTS:
         get_neighbors_from_points(p_index, p_neighbors);
         break;
 
-    case optics_data_t::DISTANCE_MATRIX:
+    case data_t::DISTANCE_MATRIX:
         get_neighbors_from_distance_matrix(p_index, p_neighbors);
         break;
 

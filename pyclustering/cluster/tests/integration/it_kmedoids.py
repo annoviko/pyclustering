@@ -269,3 +269,85 @@ class KmedoidsIntegrationTest(unittest.TestCase):
 
     def testSimple13AnswerDistanceMatrixByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, True, random_state=1000, data_type='distance_matrix')
+
+
+    def test_initial_medoids_sample01_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True)
+
+    def test_initial_medoids_sample01_matrix_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, data_type='distance_matrix')
+
+    def test_initial_medoids_sample01_wrong_amount_1_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [4], True)
+
+    def test_initial_medoids_sample01_wrong_amount_3_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, [4, 8, 0], True)
+
+    def test_initial_medoids_sample01_wrong_amount_10_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, [4, 8, 0, 9, 1, 7, 6, 5, 2, 3], True)
+
+    def test_initial_medoids_sample01_euclidean_by_core(self):
+        metric = distance_metric(type_metric.EUCLIDEAN)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_square_by_core(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_square_matrix_by_core(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, metric=metric, data_type='distance_matrix')
+
+    def test_initial_medoids_sample01_euclidean_manhattan_by_core(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_manhattan_matrix_by_core(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, metric=metric, data_type='distance_matrix')
+
+    def test_initial_medoids_sample01_euclidean_chebyshev_by_core(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_chebyshev_matrix_by_core(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], True, metric=metric, data_type='distance_matrix')
+
+    def test_initial_medoids_sample02_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [3, 20, 14], True)
+
+    def test_initial_medoids_sample02_matrix_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [3, 20, 14], True, data_type='distance_matrix')
+
+    def test_initial_medoids_sample03_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [28, 56, 5, 34], True)
+
+    def test_initial_medoids_sample03_matrix_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [28, 56, 5, 34], True, data_type='distance_matrix')
+
+    def test_initial_medoids_sample04_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, [44, 7, 64, 25, 55], True)
+
+    def test_initial_medoids_sample04_matrix_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, [44, 7, 64, 25, 55], True, data_type='distance_matrix')
+
+    def test_initial_medoids_one_dimensional_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, [0, 20], True)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, [0], True)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, [0, 20, 1], True)
+
+    def test_initial_medoids_one_dimensional_matrix_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, [0, 20], True, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, [0], True, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, [0, 20, 1], True, data_type='distance_matrix')
+
+    def test_initial_medoids_three_dimensional_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, [15, 4], True)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, [15], True)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 3, [15, 4, 14], True)
+
+    def test_initial_medoids_three_dimensional_matrix_by_core(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, [15, 4], True, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, [15], True, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 3, [15, 4, 14], True, data_type='distance_matrix')

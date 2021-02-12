@@ -33,6 +33,10 @@ class kmedoids_data : public cluster_data {
 private:
     medoid_sequence     m_medoids = { };
 
+    std::size_t         m_iterations = 0;
+
+    double              m_total_deviation = 0.0;
+
 public:
     /**
     *
@@ -69,17 +73,45 @@ public:
 public:
     /**
     *
-    * @brief    Returns medoids that corresponds to allocated clusters.
+    * @brief    Returns reference to medoids that correspond to allocated clusters.
     *
     */
     medoid_sequence & medoids() { return m_medoids; }
 
     /**
     *
-    * @brief    Returns medoids that corresponds to allocated clusters.
+    * @brief    Returns constant reference to medoids that correspond to allocated clusters.
     *
     */
     const medoid_sequence & medoids() const { return m_medoids; }
+
+    /*
+    
+    @brief      Returns reference to the amount of iterations that were performed during the clustering process.
+
+    */
+    std::size_t & iterations() { return m_iterations; }
+
+    /*
+
+    @brief      Returns the amount of iterations that were performed during the clustering process.
+
+    */
+    std::size_t iterations() const { return m_iterations; }
+
+    /*
+
+    @brief      Returns reference to the final loss (total deviation).
+
+    */
+    double & total_deviation() { return m_total_deviation; }
+
+    /*
+
+    @brief      Returns the final loss (total deviation).
+
+    */
+    double total_deviation() const { return m_total_deviation; }
 };
 
 

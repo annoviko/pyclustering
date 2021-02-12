@@ -99,7 +99,7 @@ void som::create_connections(const som_conn_type type) {
     m_neighbors.resize(m_size);
 
     for (int index = 0; index < (int) m_size; index++) {
-        std::vector<size_t> & neuron_neighbors = m_neighbors[index];
+        std::vector<std::size_t> & neuron_neighbors = m_neighbors[static_cast<std::size_t>(index)];
 
         int upper_index = index - (int) m_cols;
         int upper_left_index = index - (int) m_cols - 1;
@@ -118,39 +118,39 @@ void som::create_connections(const som_conn_type type) {
 
         if ( (type == som_conn_type::SOM_GRID_EIGHT) || (type == som_conn_type::SOM_GRID_FOUR) ) {
             if (upper_index >= 0) {
-                neuron_neighbors.push_back(upper_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(upper_index));
             }
 
             if (lower_index < (int) m_size) {
-                neuron_neighbors.push_back(lower_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(lower_index));
             }
         }
 
         if ( (type == som_conn_type::SOM_GRID_EIGHT) || (type == som_conn_type::SOM_GRID_FOUR) || (type == som_conn_type::SOM_HONEYCOMB) ) {
             if ( (left_index >= 0) && ( (int) std::floor((double) left_index / (double) m_cols) == node_row_index) ) {
-                neuron_neighbors.push_back(left_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(left_index));
             }
 
             if ( (int) std::floor((double) right_index / (double) m_cols) == node_row_index ) {
-                neuron_neighbors.push_back(right_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(right_index));
             }
         }
 
         if (type == som_conn_type::SOM_GRID_EIGHT) {
             if ( (upper_left_index >= 0) && ( (int) std::floor((double) upper_left_index / (double) m_cols) == upper_row_index) ) {
-                neuron_neighbors.push_back(upper_left_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(upper_left_index));
             }
 
             if ( (upper_right_index >= 0) && ( (int) std::floor((double) upper_right_index / (double) m_cols) == upper_row_index) ) {
-                neuron_neighbors.push_back(upper_right_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(upper_right_index));
             }
 
             if ( (lower_left_index < (int) m_size) && ( (int) std::floor((double) lower_left_index / (double) m_cols) == lower_row_index) ) {
-                neuron_neighbors.push_back(lower_left_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(lower_left_index));
             }
 
             if ( (lower_right_index < (int) m_size) && ( (int) std::floor((double) lower_right_index / (double) m_cols) == lower_row_index) ) {
-                neuron_neighbors.push_back(lower_right_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(lower_right_index));
             }
         }
 
@@ -171,19 +171,19 @@ void som::create_connections(const som_conn_type type) {
             }
 
             if ( (upper_left_index >= 0) && ( (int) std::floor((double) upper_left_index / (double) m_cols) == upper_row_index) ) {
-                neuron_neighbors.push_back(upper_left_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(upper_left_index));
             }
 
             if ( (upper_right_index >= 0) && ( (int) std::floor((double) upper_right_index / (double) m_cols) == upper_row_index) ) {
-                neuron_neighbors.push_back(upper_right_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(upper_right_index));
             }
 
             if ( (lower_left_index < (int) m_size) && ( (int) std::floor((double) lower_left_index / (double) m_cols) == lower_row_index) ) {
-                neuron_neighbors.push_back(lower_left_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(lower_left_index));
             }
 
             if ( (lower_right_index < (int) m_size) && ( (int) std::floor((double) lower_right_index / (double) m_cols) == lower_row_index) ) {
-                neuron_neighbors.push_back(lower_right_index);
+                neuron_neighbors.push_back(static_cast<std::size_t>(lower_right_index));
             }
         }
     }
@@ -223,12 +223,12 @@ void som::create_initial_weights(const som_init_type type) {
     if (dimension > 1) {
         step_y = center_value_dimension[1];
         if (m_cols > 1) { 
-            step_y = width_value_dimension[1] / (m_cols - 1.0); 
+            step_y = width_value_dimension[1] / (static_cast<double>(m_cols) - 1.0); 
         }
     }
 
     if (m_rows > 1) { 
-        step_x = width_value_dimension[0] / (m_rows - 1.0); 
+        step_x = width_value_dimension[0] / (static_cast<double>(m_rows) - 1.0); 
     }
 
     /* generate weights (topological coordinates) */
@@ -512,9 +512,9 @@ double som::calculate_init_radius(const size_t p_rows, const size_t p_cols) {
 
 
 std::ostream & operator<<(std::ostream & p_stream, const som & p_network) {
-    p_stream << p_network.m_rows << "\n";
-    p_stream << p_network.m_cols << "\n";
-    p_stream << (unsigned) p_network.m_conn_type << "\n";
+    p_stream << static_cast<std::uint64_t>(p_network.m_rows) << "\n";
+    p_stream << static_cast<std::uint64_t>(p_network.m_cols) << "\n";
+    p_stream << static_cast<std::uint64_t>(p_network.m_conn_type) << "\n";
     p_stream << pyclustering::to_string(p_network.m_weights) << "\n";
     p_stream << pyclustering::to_string(p_network.m_awards) << "\n";
     p_stream << pyclustering::to_string(p_network.m_location) << "\n";

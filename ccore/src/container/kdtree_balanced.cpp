@@ -32,7 +32,7 @@ kdtree_balanced::kdtree_balanced(const dataset & p_data, const std::vector<void 
         }
     }
 
-    m_dimension = p_data.at(0).size();
+    m_dimension = p_data[0].size();
     m_root = create_tree(nodes.begin(), nodes.end(), nullptr, 0);
 }
 

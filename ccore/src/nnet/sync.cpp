@@ -44,6 +44,8 @@ namespace nnet {
 
 const std::size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE      = 4096;
 
+const std::size_t sync_network::PARALLEL_RROCESSING_THRESHOLD           = 64;
+
 
 
 double sync_ordering::calculate_sync_order(const std::vector<double> & p_phases) {
@@ -134,10 +136,10 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
     m_oscillators = std::vector<sync_oscillator>(size, sync_oscillator());
     
     if (size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
-        m_connections = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(size));
+        m_connections = std::make_shared<adjacency_bit_matrix>(size);
     }
     else {
-        m_connections = std::shared_ptr<adjacency_matrix>(new adjacency_matrix(size));
+        m_connections = std::make_shared<adjacency_matrix>(size);
     }
 
     adjacency_connector<adjacency_collection> connector;
@@ -190,7 +192,7 @@ double sync_network::sync_local_order() const {
 }
 
 
-void sync_network::set_equation(equation<double> & solver) {
+void sync_network::set_equation(const equation<double> & solver) {
     m_equation = solver;
 }
 
@@ -282,9 +284,16 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
     std::vector<double> next_phases(size(), 0.0);
 
-    parallel_for(std::size_t(0), size(), [this, solver, t, step, int_step, &next_phases](const std::size_t p_index) {
-        calculate_phase(solver, t, step, int_step, p_index, next_phases);
-    });
+    if (size() < PARALLEL_RROCESSING_THRESHOLD) {
+        for (std::size_t index = 0; index < size(); index++) {
+            calculate_phase(solver, t, step, int_step, index, next_phases);
+        }
+    }
+    else {
+        parallel_for(std::size_t(0), size(), [this, solver, t, step, int_step, &next_phases](const std::size_t p_index) {
+            calculate_phase(solver, t, step, int_step, p_index, next_phases);
+        });
+    }
 
     /* store result */
     for (std::size_t index = 0; index < size(); index++) {
@@ -362,7 +371,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
     }
 
     /* push back the first object to the first cluster */
-    ensembles.push_back(sync_ensemble());
+    ensembles.emplace_back(sync_ensemble());
     ensembles[0].push_back(0);
 
     sync_dynamic::const_iterator last_state_dynamic = cbegin() + iteration;

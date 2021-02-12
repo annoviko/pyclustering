@@ -9,6 +9,9 @@
 
 #include <pyclustering/nnet/hhn.hpp>
 
+#include <array>
+#include <cstdint>
+
 #include <pyclustering/differential/differ_state.hpp>
 #include <pyclustering/differential/runge_kutta_4.hpp>
 #include <pyclustering/differential/runge_kutta_fehlberg_45.hpp>
@@ -300,17 +303,19 @@ std::ostream& operator<<(std::ostream & p_stream, const hhn_dynamic & p_dynamic)
     std::set<hhn_dynamic::collect> enabled;
     p_dynamic.get_enabled(enabled);
 
-    const std::vector<hhn_dynamic::collect> order_types = {
+    const std::array<hhn_dynamic::collect, 4> order_types { 
+        {
             hhn_dynamic::collect::MEMBRANE_POTENTIAL,
             hhn_dynamic::collect::ACTIVE_COND_SODIUM,
             hhn_dynamic::collect::INACTIVE_COND_SODIUM,
             hhn_dynamic::collect::ACTIVE_COND_POTASSIUM
+        }
     };
 
-    p_stream << p_dynamic.size_dynamic() << " " << p_dynamic.size_network() << "\n";
+    p_stream << static_cast<std::uint64_t>(p_dynamic.size_dynamic()) << " " << static_cast<std::uint64_t>(p_dynamic.size_network()) << "\n";
     for (std::size_t index_order = 0; index_order < order_types.size(); index_order++) {
         if (enabled.find(order_types[index_order]) != enabled.cend()) {
-            p_stream << index_order << " ";
+            p_stream << static_cast<std::uint64_t>(index_order) << " ";
         }
     }
     p_stream << "\n";

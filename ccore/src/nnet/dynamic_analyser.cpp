@@ -52,13 +52,13 @@ std::size_t spike::get_stop() const {
 
 
 bool spike::compare(const spike & p_other, const double p_tolerance) const {
-    const double delta = m_duration * p_tolerance;
+    const double delta = static_cast<double>(m_duration) * p_tolerance;
 
-    if (absolute_difference(p_other.get_duration(), get_duration()) > delta) {
+    if (static_cast<double>(absolute_difference(p_other.get_duration(), get_duration())) > delta) {
         return false;
     }
 
-    const double difference = (double) absolute_difference(p_other.get_start(), get_start()) + absolute_difference(p_other.get_stop(), get_stop());
+    const double difference = static_cast<double>(absolute_difference(p_other.get_start(), get_start()) + absolute_difference(p_other.get_stop(), get_stop()));
     if (difference > delta) {
         return false;
     }

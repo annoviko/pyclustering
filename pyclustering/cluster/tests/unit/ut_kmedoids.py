@@ -15,7 +15,7 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
-from pyclustering.cluster.kmedoids import kmedoids
+from pyclustering.cluster.kmedoids import kmedoids, build, pam
 from pyclustering.cluster.tests.kmedoids_templates import kmedoids_test_template
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
@@ -358,3 +358,101 @@ class KmedoidsUnitTest(unittest.TestCase):
 
     def test_incorrect_itermax(self):
         self.assertRaises(ValueError, kmedoids, [[0], [1], [2]], [1], itermax=-5)
+
+
+    def test_pam_alias(self):
+        self.assertRaises(ValueError, pam, [], [1])
+        self.assertRaises(ValueError, pam, [[0], [1], [2]], [])
+        self.assertRaises(ValueError, pam, [[0], [1], [2]], [1], -1.0)
+        self.assertRaises(ValueError, pam, [[0], [1], [2]], [1], itermax=-5)
+
+
+    def test_initial_medoids_sample01(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False)
+
+    def test_initial_medoids_sample01_matrix(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, data_type='distance_matrix')
+
+    def test_initial_medoids_sample01_wrong_amount_1(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [4], False)
+
+    def test_initial_medoids_sample01_wrong_amount_3(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, [4, 8, 0], False)
+
+    def test_initial_medoids_sample01_wrong_amount_10(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, [4, 8, 0, 9, 1, 7, 6, 5, 2, 3], False)
+
+    def test_initial_medoids_sample01_euclidean(self):
+        metric = distance_metric(type_metric.EUCLIDEAN)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_square(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_square_matrix(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, metric=metric, data_type='distance_matrix')
+
+    def test_initial_medoids_sample01_euclidean_manhattan(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_manhattan_matrix(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, metric=metric, data_type='distance_matrix')
+
+    def test_initial_medoids_sample01_euclidean_chebyshev(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, metric=metric)
+
+    def test_initial_medoids_sample01_euclidean_chebyshev_matrix(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [4, 8], False, metric=metric, data_type='distance_matrix')
+
+    def test_initial_medoids_sample02(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [3, 20, 14], False)
+
+    def test_initial_medoids_sample02_matrix(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [3, 20, 14], False, data_type='distance_matrix')
+
+    def test_initial_medoids_sample03(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [28, 56, 5, 34], False)
+
+    def test_initial_medoids_sample03_matrix(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [28, 56, 5, 34], False, data_type='distance_matrix')
+
+    def test_initial_medoids_sample04(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, [44, 7, 64, 25, 55], False)
+
+    def test_initial_medoids_sample04_matrix(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, [44, 7, 64, 25, 55], False, data_type='distance_matrix')
+
+    def test_initial_medoids_one_dimensional(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, [0, 20], False)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, [0], False)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, [0, 20, 1], False)
+
+    def test_initial_medoids_one_dimensional_matrix(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, [0, 20], False, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, [0], False, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, [0, 20, 1], False, data_type='distance_matrix')
+
+    def test_initial_medoids_three_dimensional(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, [15, 4], False)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, [15], False)
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 3, [15, 4, 14], False)
+
+    def test_initial_medoids_three_dimensional_matrix(self):
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, [15, 4], False, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, [15], False, data_type='distance_matrix')
+        kmedoids_test_template.initialize_medoids(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 3, [15, 4, 14], False, data_type='distance_matrix')
+
+
+    def test_initial_medoids_incorrect_data(self):
+        self.assertRaises(ValueError, build, [], 1)
+        self.assertRaises(ValueError, build, None, 1)
+
+    def test_initial_medoids_incorrect_amount(self):
+        self.assertRaises(ValueError, build, [[0], [1], [2]], 0)
+        self.assertRaises(ValueError, build, [[0], [1], [2]], 4)

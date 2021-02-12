@@ -102,6 +102,9 @@
     <ClInclude Include="..\include\pyclustering\interface\xmeans_interface.h">
       <Filter>Header Files\interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\pyclustering\interface\pam_build_interface.h">
+      <Filter>Header Files\interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="interface\agglomerative_interface.cpp">
@@ -189,6 +192,9 @@
       <Filter>Source Files\interface</Filter>
     </ClCompile>
     <ClCompile Include="interface\xmeans_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\pam_build_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
   </ItemGroup>

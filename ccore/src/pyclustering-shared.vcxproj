@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>EXPORT_PYCLUSTERING_INTERFACE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <OpenMPSupport>false</OpenMPSupport>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <AdditionalDependencies>pyclustering-static.lib</AdditionalDependencies>
@@ -123,6 +124,7 @@
       <PreprocessorDefinitions>EXPORT_PYCLUSTERING_INTERFACE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <OpenMPSupport>false</OpenMPSupport>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <AdditionalDependencies>pyclustering-static.lib</AdditionalDependencies>
@@ -199,6 +201,7 @@
     <ClInclude Include="..\include\pyclustering\interface\mbsas_interface.h" />
     <ClInclude Include="..\include\pyclustering\interface\metric_interface.h" />
     <ClInclude Include="..\include\pyclustering\interface\optics_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\pam_build_interface.h" />
     <ClInclude Include="..\include\pyclustering\interface\pcnn_interface.h" />
     <ClInclude Include="..\include\pyclustering\interface\pyclustering_interface.h" />
     <ClInclude Include="..\include\pyclustering\interface\pyclustering_package.hpp" />
@@ -230,6 +233,7 @@
     <ClCompile Include="interface\mbsas_interface.cpp" />
     <ClCompile Include="interface\metric_interface.cpp" />
     <ClCompile Include="interface\optics_interface.cpp" />
+    <ClCompile Include="interface\pam_build_interface.cpp" />
     <ClCompile Include="interface\pcnn_interface.cpp" />
     <ClCompile Include="interface\pyclustering_interface.cpp" />
     <ClCompile Include="interface\pyclustering_package.cpp" />

@@ -35,8 +35,8 @@ namespace parallel {
 
 
 /* Pool of threads is used to prevent overhead in case of nested loop */
-static const std::size_t AMOUNT_HARDWARE_THREADS = std::thread::hardware_concurrency();
-static const std::size_t AMOUNT_THREADS = (AMOUNT_HARDWARE_THREADS > 1) ? (AMOUNT_HARDWARE_THREADS - 1) : 0;
+const std::size_t AMOUNT_HARDWARE_THREADS = std::thread::hardware_concurrency();
+const std::size_t AMOUNT_THREADS = (AMOUNT_HARDWARE_THREADS > 1) ? (AMOUNT_HARDWARE_THREADS - 1) : 0;
 
 
 /*!
@@ -87,24 +87,7 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
 
     TypeIndex interval_thread_length = interval_length / p_step / static_cast<TypeIndex>(p_threads);    /* How many iterations should be performed by each thread */
     if (interval_thread_length < p_step)  {
-        /*
-
-        There is not enough work to load all threads.
-
-        Still tasks could be splitted between threads, we do not how long they are going to be executed, 
-        but if input task is small than we should expect huge performance degradation (see hsyncnet tests).
-        
-        */
-
-#if defined(DEVIDE_AND_CONQUER_STRATEGY)
         interval_thread_length = p_step;
-#else
-        for (TypeIndex i = p_start; i < p_end; i += p_step) {
-            p_task(i);
-        }
-
-        return;
-#endif
     }
     else if (interval_thread_length % p_step != 0) {
         interval_thread_length = interval_thread_length - (interval_thread_length % p_step);
@@ -121,7 +104,7 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
     It is possible that there are not enough work for all threads, lets check that we are not out of range.
 
     */
-    for (std::size_t i = 0; false && (i < static_cast<TypeIndex>(p_threads) - 1) && (current_end < p_end); ++i) {
+    for (std::size_t i = 0; (i < static_cast<TypeIndex>(p_threads) - 1) && (current_end < p_end); ++i) {
         const auto async_task = [&p_task, current_start, current_end, p_step](){
             for (TypeIndex i = current_start; i < current_end; i += p_step) {
                 p_task(i);

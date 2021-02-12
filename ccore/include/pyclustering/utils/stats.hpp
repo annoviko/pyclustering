@@ -188,15 +188,15 @@ double anderson(const TypeContainer & p_data) {
     const auto y = cdf(sample);
 
     double s = 0.0;
-    std::size_t n = p_data.size();
+    const std::size_t n = p_data.size();
 
     for (std::size_t i = 0; i < n; ++i) {
-        const double k = 2.0 * (i + 1.0) - 1.0;
+        const double k = 2.0 * (static_cast<double>(i) + 1.0) - 1.0;
         s += k * (std::log(y[i]) + std::log(1.0 - y[n - i - 1]));
     }
 
-    s /= n;
-    return -s - n;
+    s /= static_cast<double>(n);
+    return -s - static_cast<double>(n);
 }
 
 

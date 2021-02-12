@@ -355,6 +355,8 @@ public:
  */
 class sync_network {
 private:
+    const static std::size_t PARALLEL_RROCESSING_THRESHOLD;
+
     const static std::size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
 
 private:
@@ -610,7 +612,7 @@ protected:
     * @param[in]  solver: equation of phase oscillator.
     *
     */
-    virtual void set_equation(equation<double> & solver);
+    virtual void set_equation(const equation<double> & solver);
 
 private:
     /*!

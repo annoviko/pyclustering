@@ -23,7 +23,7 @@ pyclustering_package * dbscan_algorithm(const pyclustering_package * const p_sam
 
     pyclustering::clst::dbscan_data output_result;
 
-    solver.process(input_dataset, (pyclustering::clst::dbscan_data_t) p_data_type, output_result);
+    solver.process(input_dataset, (pyclustering::clst::data_t) p_data_type, output_result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = output_result.size() + 1;   /* the last for noise */

@@ -165,16 +165,13 @@ void clique::get_spatial_location(const clique_block_location & p_location, cons
     std::vector<double> cell_sizes(dimension, 0.0);
 
     for (std::size_t i = 0; i < cell_sizes.size(); ++i) {
-        cell_sizes[i] = p_info.m_sizes[i] / m_intervals;
+        cell_sizes[i] = p_info.m_sizes[i] / static_cast<double>(m_intervals);
     }
 
     for (std::size_t index_dimension = 0; index_dimension < dimension; ++index_dimension) {
-        min_corner[index_dimension] += cell_sizes[index_dimension] * p_location[index_dimension];
+        min_corner[index_dimension] += cell_sizes[index_dimension] * static_cast<double>(p_location[index_dimension]);
 
-        if (p_location[index_dimension] == m_intervals - 1) {
-            max_corner[index_dimension] = p_info.m_max_corner[index_dimension];
-        }
-        else {
+        if (p_location[index_dimension] != m_intervals - 1) {
             max_corner[index_dimension] = min_corner[index_dimension] + cell_sizes[index_dimension];
         }
     }

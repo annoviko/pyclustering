@@ -99,6 +99,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <OpenMPSupport>false</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
@@ -115,6 +116,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <OpenMPSupport>false</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
@@ -184,6 +186,7 @@
     <ClCompile Include="cluster\optics.cpp" />
     <ClCompile Include="cluster\optics_descriptor.cpp" />
     <ClCompile Include="cluster\ordering_analyser.cpp" />
+    <ClCompile Include="cluster\pam_build.cpp" />
     <ClCompile Include="cluster\random_center_initializer.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
     <ClCompile Include="cluster\silhouette.cpp" />
@@ -232,6 +235,7 @@
     <ClInclude Include="..\include\pyclustering\cluster\cluster_data.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\cure.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\cure_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\data_type.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\dbscan.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\dbscan_data.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\elbow.hpp" />
@@ -254,6 +258,7 @@
     <ClInclude Include="..\include\pyclustering\cluster\optics_data.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\optics_descriptor.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\ordering_analyser.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\pam_build.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\random_center_initializer.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\rock.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\silhouette.hpp" />
