@@ -37,7 +37,7 @@ template_kmedoids_length_process_data(const dataset_ptr p_data,
 
     if (p_itermax == 0) {
         ASSERT_EQ(0.0, output_result.total_deviation());
-        ASSERT_EQ(0, output_result.iterations());
+        ASSERT_EQ(std::size_t(0), output_result.iterations());
         ASSERT_TRUE(actual_clusters.empty());
         ASSERT_EQ(p_start_medoids, medoids);
         return;
@@ -56,7 +56,7 @@ template_kmedoids_length_process_data(const dataset_ptr p_data,
         }
     }
 
-    ASSERT_GT(output_result.iterations(), 0);
+    ASSERT_GT(output_result.iterations(), std::size_t(0));
     ASSERT_NEAR(expected_total_deviation, output_result.total_deviation(), 0.000001);
 
     ASSERT_LE(medoids.size(), p_start_medoids.size());
@@ -85,7 +85,7 @@ template_kmedoids_length_process_distance_matrix(const dataset_ptr p_data,
 
     if (p_itermax == 0) {
         ASSERT_EQ(0.0, output_result.total_deviation());
-        ASSERT_EQ(0, output_result.iterations());
+        ASSERT_EQ(std::size_t(0), output_result.iterations());
         ASSERT_TRUE(actual_clusters.empty());
         ASSERT_EQ(p_start_medoids, medoids);
         return;
@@ -104,7 +104,7 @@ template_kmedoids_length_process_distance_matrix(const dataset_ptr p_data,
         }
     }
 
-    ASSERT_GT(output_result.iterations(), 0);
+    ASSERT_GT(output_result.iterations(), std::size_t(0));
     ASSERT_NEAR(expected_total_deviation, output_result.total_deviation(), 0.000001);
 
     ASSERT_EQ(p_start_medoids.size(), actual_clusters.size());
