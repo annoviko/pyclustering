@@ -76,19 +76,20 @@ void kmedoids::process(const dataset & p_data, const data_t p_type, kmedoids_dat
 
     double changes = std::numeric_limits<double>::max();
     double previous_deviation = std::numeric_limits<double>::max();
-    double current_deviation = std::numeric_limits<double>::max();
+    p_result.total_deviation() = 0;
 
     if (m_itermax > 0) {
-        current_deviation = update_clusters();
+        p_result.total_deviation() = update_clusters();
     }
 
-    for (p_result.iterations() = 0; (p_result.iterations() < m_itermax) && (changes > m_tolerance); p_result.iterations()++) {
+    for (p_result.iterations() = 0; (p_result.iterations() < m_itermax) && (changes > m_tolerance);) {
+        p_result.iterations()++;
         const double swap_cost = swap_medoids();
 
         if (swap_cost != NOTHING_TO_SWAP) {
-            previous_deviation = current_deviation;
-            current_deviation = update_clusters();
-            changes = previous_deviation - current_deviation;
+            previous_deviation = p_result.total_deviation();
+            p_result.total_deviation() = update_clusters();
+            changes = previous_deviation - p_result.total_deviation();
         }
         else {
             break;
@@ -143,7 +144,7 @@ kmedoids::distance_calculator kmedoids::create_distance_calculator(const data_t 
         };
     }
     else {
-        throw std::invalid_argument("Unknown type data is specified");
+        throw std::invalid_argument("Unknown type data is specified (data type code: '" + std::to_string(static_cast<std::size_t>(p_type)) + "') .");
     }
 }
 

@@ -36,10 +36,28 @@ template_kmedoids_length_process_data(const dataset_ptr p_data,
     const medoid_sequence & medoids = output_result.medoids();
 
     if (p_itermax == 0) {
+        ASSERT_EQ(0.0, output_result.total_deviation());
+        ASSERT_EQ(0, output_result.iterations());
         ASSERT_TRUE(actual_clusters.empty());
         ASSERT_EQ(p_start_medoids, medoids);
         return;
     }
+
+    double expected_total_deviation = 0.0;
+    for (std::size_t index_cluster = 0; index_cluster < actual_clusters.size(); index_cluster++) {
+        const auto index_point_medoid = medoids[index_cluster];
+
+        for (const std::size_t index_point : actual_clusters[index_cluster]) {
+            if (index_point_medoid == index_point) {
+                continue;
+            }
+
+            expected_total_deviation += p_metric(p_data->at(index_point_medoid), p_data->at(index_point));
+        }
+    }
+
+    ASSERT_GT(output_result.iterations(), 0);
+    ASSERT_NEAR(expected_total_deviation, output_result.total_deviation(), 0.000001);
 
     ASSERT_LE(medoids.size(), p_start_medoids.size());
     ASSERT_EQ(medoids.size(), actual_clusters.size());
@@ -55,7 +73,7 @@ template_kmedoids_length_process_distance_matrix(const dataset_ptr p_data,
         const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square()) {
 
     dataset matrix;
-    distance_matrix(*p_data, matrix);
+    distance_matrix(*p_data, p_metric, matrix);
 
     kmedoids_data output_result;
     kmedoids solver(p_start_medoids, kmedoids::DEFAULT_TOLERANCE, p_itermax, p_metric);
@@ -66,10 +84,28 @@ template_kmedoids_length_process_distance_matrix(const dataset_ptr p_data,
     const medoid_sequence & medoids = output_result.medoids();
 
     if (p_itermax == 0) {
+        ASSERT_EQ(0.0, output_result.total_deviation());
+        ASSERT_EQ(0, output_result.iterations());
         ASSERT_TRUE(actual_clusters.empty());
         ASSERT_EQ(p_start_medoids, medoids);
         return;
     }
+
+    double expected_total_deviation = 0.0;
+    for (std::size_t index_cluster = 0; index_cluster < actual_clusters.size(); index_cluster++) {
+        const auto index_point_medoid = medoids[index_cluster];
+
+        for (const std::size_t index_point : actual_clusters[index_cluster]) {
+            if (index_point_medoid == index_point) {
+                continue;
+            }
+
+            expected_total_deviation += p_metric(p_data->at(index_point_medoid), p_data->at(index_point));
+        }
+    }
+
+    ASSERT_GT(output_result.iterations(), 0);
+    ASSERT_NEAR(expected_total_deviation, output_result.total_deviation(), 0.000001);
 
     ASSERT_EQ(p_start_medoids.size(), actual_clusters.size());
     ASSERT_EQ(p_start_medoids.size(), medoids.size());

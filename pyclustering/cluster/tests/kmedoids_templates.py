@@ -44,7 +44,7 @@ class kmedoids_test_template:
 
         input_data = sample
         if data_type == 'distance_matrix':
-            input_data = calculate_distance_matrix(sample)
+            input_data = calculate_distance_matrix(sample, metric)
 
             if input_type == 'numpy':
                 input_data = numpy.array(input_data)
@@ -65,6 +65,8 @@ class kmedoids_test_template:
             medoids = kmedoids_instance.get_medoids()
 
             if itermax == 0:
+                assertion.eq(0, kmedoids_instance.get_iterations())
+                assertion.eq(0.0, kmedoids_instance.get_total_deviation())
                 assertion.eq([], clusters)
                 assertion.eq(medoids, initial_medoids)
                 return
@@ -88,6 +90,19 @@ class kmedoids_test_template:
                 expected_cluster_length.sort()
                 if obtained_cluster_sizes != expected_cluster_length:
                     continue
+
+            assertion.gt(kmedoids_instance.get_iterations(), 0)
+
+            expected_total_deviation = 0.0
+            for index_cluster in range(len(clusters)):
+                index_point_medoid = medoids[index_cluster]
+                for index_point in clusters[index_cluster]:
+                    if index_point == index_point_medoid:
+                        continue
+
+                    expected_total_deviation += metric(sample[index_point_medoid], sample[index_point])
+
+            assertion.eq_float(expected_total_deviation, kmedoids_instance.get_total_deviation(), 0.000001)
 
             testing_result = True
 

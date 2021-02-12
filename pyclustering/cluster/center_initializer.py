@@ -355,7 +355,13 @@ class kmeans_plusplus_initializer:
         
         """
 
-        return_index = kwargs.get('return_index', False)
+        return_index = kwargs.get('return_index', None)
+        if return_index is None:
+            return_index = (self.__data_type == 'distance_matrix')
+
+        if (return_index is False) and (self.__data_type == 'distance_matrix'):
+            raise ValueError("In case of 'distance_matrix' data type, parameter 'return_index' cannot be 'False'. "
+                             "Please, use 'return_index=True' in case of 'distance_matrix' data type.")
 
         index_point = self.__get_initial_center(True)
         centers = [index_point]

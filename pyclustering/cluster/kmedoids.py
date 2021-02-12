@@ -336,6 +336,7 @@ class kmedoids:
         self.__distance_second_medoid = [float('inf')] * len(data)
         self.__tolerance = tolerance
         self.__iterations = 0
+        self.__total_deviation = float('inf')
 
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         self.__data_type = kwargs.get('data_type', 'points')
@@ -366,28 +367,29 @@ class kmedoids:
         
         if self.__ccore is True:
             ccore_metric = metric_wrapper.create_instance(self.__metric)
-            self.__clusters, self.__medoid_indexes = kmedoids_wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, self.__itermax, ccore_metric.get_pointer(), self.__data_type)
+            self.__clusters, self.__medoid_indexes, self.__iterations, self.__total_deviation = kmedoids_wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, self.__itermax, ccore_metric.get_pointer(), self.__data_type)
         
         else:
             changes = float('inf')
-            previous_deviation, current_deviation = float('inf'), float('inf')
+            previous_deviation, self.__total_deviation = float('inf'), 0
 
             self.__iterations = 0
 
             if self.__itermax > 0:
-                current_deviation = self.__update_clusters()
+                self.__total_deviation = self.__update_clusters()
 
             while (changes > self.__tolerance) and (self.__iterations < self.__itermax):
+                self.__iterations += 1
                 swap_cost = self.__swap_medoids()
 
                 if swap_cost != float('inf'):
-                    previous_deviation = current_deviation
-                    current_deviation = self.__update_clusters()
-                    changes = previous_deviation - current_deviation
+                    previous_deviation = self.__total_deviation
+                    self.__total_deviation = self.__update_clusters()
+                    changes = previous_deviation - self.__total_deviation
                 else:
                     break
 
-                self.__iterations += 1
+
 
             self.__erase_empty_clusters()
 
@@ -489,6 +491,17 @@ class kmedoids:
 
         """
         return self.__iterations
+
+
+    def get_total_deviation(self):
+        """!
+        @brief Returns total deviation - the final loss after optimization.
+        @return (float) The total deviation - the final loss after optimization.
+
+        @see process()
+
+        """
+        return self.__total_deviation
 
 
     def get_cluster_encoding(self):

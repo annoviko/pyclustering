@@ -32,7 +32,10 @@ TEST(utest_interface_kmedoids, kmedoids_api) {
     distance_metric<point> metric = distance_metric_factory<point>::euclidean_square();
 
     pyclustering_package * kmedoids_result = kmedoids_algorithm(sample.get(), medoids.get(), 0.001, 100, &metric, 0);
+
     ASSERT_NE(nullptr, kmedoids_result);
+    ASSERT_GT(((std::size_t *)((pyclustering_package **)kmedoids_result->data)[KMEDOIDS_PACKAGE_INDEX_ITERATIONS])[0], 0);
+    ASSERT_GT(((double *)((pyclustering_package **)kmedoids_result->data)[KMEDOIDS_PACKAGE_INDEX_TOTAL_DEVIATION])[0], 0.0);
 
     delete kmedoids_result;
 }

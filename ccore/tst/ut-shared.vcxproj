@@ -89,6 +89,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)external\include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
@@ -107,6 +108,7 @@ copy "$(OutDir)pyclustering.dll" "..\tst\pyclustering.dll" /y;</Command>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)external\include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>

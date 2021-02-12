@@ -99,6 +99,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <OpenMPSupport>false</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
@@ -115,6 +116,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <OpenMPSupport>false</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib>
       <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>

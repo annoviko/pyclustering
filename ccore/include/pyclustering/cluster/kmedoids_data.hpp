@@ -35,6 +35,8 @@ private:
 
     std::size_t         m_iterations = 0;
 
+    double              m_total_deviation = 0.0;
+
 public:
     /**
     *
@@ -96,6 +98,20 @@ public:
 
     */
     std::size_t iterations() const { return m_iterations; }
+
+    /*
+
+    @brief      Returns reference to the final loss (total deviation).
+
+    */
+    double & total_deviation() { return m_total_deviation; }
+
+    /*
+
+    @brief      Returns the final loss (total deviation).
+
+    */
+    double total_deviation() const { return m_total_deviation; }
 };
 
 
