@@ -73,14 +73,14 @@ public:
 public:
     /**
     *
-    * @brief    Returns reference medoids that corresponds to allocated clusters.
+    * @brief    Returns reference to medoids that correspond to allocated clusters.
     *
     */
     medoid_sequence & medoids() { return m_medoids; }
 
     /**
     *
-    * @brief    Returns constant reference to medoids that corresponds to allocated clusters.
+    * @brief    Returns constant reference to medoids that correspond to allocated clusters.
     *
     */
     const medoid_sequence & medoids() const { return m_medoids; }
