@@ -39,7 +39,7 @@ void pam_build::initialize(const dataset & p_data, const data_t p_type, const me
     m_data_ptr = (dataset *) &p_data;
     m_medoids_ptr = (medoids *) &p_medoids;
 
-    m_calculator = create_distance_calculator(p_type);
+    create_distance_calculator(p_type);
     m_distance_closest_medoid = std::vector<double>(p_data.size(), 0.0);
 
     calculate_first_medoid();
@@ -85,27 +85,27 @@ void pam_build::calculate_next_medoids() const {
     std::vector<double> optimal_distances(m_data_ptr->size(), 0.0);
     std::vector<double> current_distances(m_data_ptr->size(), 0.0);
 
-    std::unordered_set<std::size_t> non_available = { m_medoids_ptr->at(0) };
+    std::vector<bool>   medoids(m_data_ptr->size(), false);
+    medoids[m_medoids_ptr->at(0)] = true;
 
     while (m_medoids_ptr->size() < m_amount) {
         std::size_t optimal_medoid = INVALID_MEDOID;
         double optimal_deviation = std::numeric_limits<double>::max();
 
-        for (std::size_t i = 0; i < m_data_ptr->size(); i++) {
-            if (non_available.count(i) > 0) {
+        for (std::size_t i = 0; i < m_data_ptr->size(); ++i) {
+            if (medoids[i]) {
                 continue;   /* already assigned as a medoid */
             }
 
             double total_deviation = 0.0;
-            for (std::size_t j = 0; j < m_data_ptr->size(); j++) {
-                if ((i == j) || (non_available.count(j) > 0)) {
+            for (std::size_t j = 0; j < m_data_ptr->size(); ++j) {
+                if ((i == j) || (medoids[j])) {
                     current_distances[j] = 0;
                     continue;
                 }
 
-                const double distance = std::min(m_calculator(i, j), m_distance_closest_medoid[j]);
-                total_deviation += distance;
-                current_distances[j] = distance;
+                current_distances[j] = std::min(m_calculator(i, j), m_distance_closest_medoid[j]);
+                total_deviation += current_distances[j];
             }
 
             if (total_deviation < optimal_deviation) {
@@ -120,22 +120,28 @@ void pam_build::calculate_next_medoids() const {
         }
 
         m_medoids_ptr->push_back(optimal_medoid);
-        non_available.insert(optimal_medoid);
+        medoids[optimal_medoid] = true;
         std::swap(m_distance_closest_medoid, optimal_distances);
     }
 }
 
 
-pam_build::distance_calculator pam_build::create_distance_calculator(const data_t p_type) const {
+double pam_build::calculate_distance_using_points(const std::size_t p_index1, const std::size_t p_index2) const {
+    return m_metric((*m_data_ptr)[p_index1], (*m_data_ptr)[p_index2]);
+}
+
+
+double pam_build::calculate_distance_using_distance_matrix(const std::size_t p_index1, const std::size_t p_index2) const {
+    return (*m_data_ptr)[p_index1][p_index2];
+}
+
+
+void pam_build::create_distance_calculator(const data_t p_type) const {
     if (p_type == data_t::POINTS) {
-        return [this](const std::size_t index1, const std::size_t index2) {
-            return m_metric((*m_data_ptr)[index1], (*m_data_ptr)[index2]);
-        };
+        m_calculator = std::bind(&pam_build::calculate_distance_using_points, this, std::placeholders::_1, std::placeholders::_2);
     }
     else if (p_type == data_t::DISTANCE_MATRIX) {
-        return [this](const std::size_t index1, const std::size_t index2) {
-            return (*m_data_ptr)[index1][index2];
-        };
+        m_calculator = std::bind(&pam_build::calculate_distance_using_distance_matrix, this, std::placeholders::_1, std::placeholders::_2);
     }
     else {
         throw std::invalid_argument("Unknown type data is specified (type code: '" + std::to_string(static_cast<std::size_t>(p_type)) + "').");

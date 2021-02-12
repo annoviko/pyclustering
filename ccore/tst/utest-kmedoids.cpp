@@ -422,12 +422,19 @@ TEST(utest_kmedoids, itermax_10_simple02) {
 #include <chrono>
 
 TEST(utest_kmedoids, big_data) {
-    const std::size_t cluster_length = 100;
-    const std::size_t amount_clusters = 10;
+    auto p_data = fcps_sample_factory::create_sample(FCPS_SAMPLE::ENGY_TIME);
 
-    auto points = simple_sample_factory::create_random_sample(cluster_length, amount_clusters);
+    dataset data;
+    auto p_data_type = data_t::DISTANCE_MATRIX;
 
-    medoid_sequence start_medoids = { 10, cluster_length, cluster_length * 2, cluster_length * 3, cluster_length * 4, cluster_length * 5 };
+    if (p_data_type == data_t::POINTS) {
+        data = *p_data;
+    }
+    else {
+        distance_matrix(*p_data, data);
+    }
+
+    medoid_sequence start_medoids = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
 
     auto start = std::chrono::system_clock::now();
 
@@ -435,7 +442,7 @@ TEST(utest_kmedoids, big_data) {
     for (std::size_t i = 0; i < repeat; i++) {
       kmedoids_data output_result;
       kmedoids solver(start_medoids, 0.0001);
-      solver.process(*points, output_result);
+      solver.process(data, p_data_type, output_result);
     }
 
     auto end = std::chrono::system_clock::now();

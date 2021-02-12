@@ -149,6 +149,7 @@ public:
             throw std::invalid_argument("pyclustering_package::extract() [" + std::to_string(__LINE__) + "]: argument is not 'PYCLUSTERING_TYPE_LIST').");
         }
 
+        container.reserve(size);
         for (std::size_t i = 0; i < size; i++) {
             std::vector<TypeValue> subcontainer = { };
             extract(subcontainer, at<pyclustering_package *>(i));
@@ -167,6 +168,7 @@ private:
     */
     template <class TypeValue>
     void extract(std::vector<TypeValue> & container, const pyclustering_package * const package) const {
+        container.reserve(package->size);
         for (std::size_t i = 0; i < package->size; i++) {
             container.push_back(package->at<TypeValue>(i));
         }

@@ -150,11 +150,13 @@ private:
     @brief    Creates distance calcultor in line with data type and distance metric metric.
     
     @param[in] p_type: data type (points or distance matrix).
-    
-    @return   Distance calculator.
 
     */
-    distance_calculator create_distance_calculator(const data_t p_type);
+    void create_distance_calculator(const data_t p_type);
+
+    double calculate_distance_using_distance_matrix(const std::size_t p_index1, const std::size_t p_index2) const;
+
+    double calculate_distance_using_points(const std::size_t p_index1, const std::size_t p_index2) const;
 
     /*!
     

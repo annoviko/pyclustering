@@ -128,3 +128,25 @@ TEST(utest_pam_build, correct_medoids_three_dimensional_distance_matrix) {
     template_pam_build_medoids(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_11), 1, { 15 }, data_t::DISTANCE_MATRIX);
     template_pam_build_medoids(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_11), 3, { 15, 4, 14 }, data_t::DISTANCE_MATRIX);
 }
+
+
+#if 0
+TEST(utest_pam_build, test_performance) {
+    auto p_data = fcps_sample_factory::create_sample(FCPS_SAMPLE::ENGY_TIME);
+
+    dataset data;
+    auto p_data_type = data_t::DISTANCE_MATRIX;
+
+    if (p_data_type == data_t::POINTS) {
+        data = *p_data;
+    }
+    else {
+        distance_matrix(*p_data, data);
+    }
+
+    medoids medoids;
+    pam_build(10).initialize(data, p_data_type, medoids);
+
+    ASSERT_EQ(10, medoids.size());
+}
+#endif

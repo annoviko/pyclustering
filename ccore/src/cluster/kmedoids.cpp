@@ -65,7 +65,7 @@ void kmedoids::process(const dataset & p_data, kmedoids_data & p_result) {
 void kmedoids::process(const dataset & p_data, const data_t p_type, kmedoids_data & p_result) {
     m_data_ptr = &p_data;
     m_result_ptr = (kmedoids_data *) &p_result;
-    m_calculator = create_distance_calculator(p_type);
+    create_distance_calculator(p_type);
 
     medoid_sequence & medoids = m_result_ptr->medoids();
     medoids.assign(m_initial_medoids.begin(), m_initial_medoids.end());
@@ -132,19 +132,25 @@ double kmedoids::update_clusters() {
 }
 
 
-kmedoids::distance_calculator kmedoids::create_distance_calculator(const data_t p_type) {
+double kmedoids::calculate_distance_using_points(const std::size_t p_index1, const std::size_t p_index2) const {
+    return m_metric((*m_data_ptr)[p_index1], (*m_data_ptr)[p_index2]);
+}
+
+
+double kmedoids::calculate_distance_using_distance_matrix(const std::size_t p_index1, const std::size_t p_index2) const {
+    return (*m_data_ptr)[p_index1][p_index2];
+}
+
+
+void kmedoids::create_distance_calculator(const data_t p_type) {
     if (p_type == data_t::POINTS) {
-        return [this](const std::size_t index1, const std::size_t index2) {
-          return m_metric((*m_data_ptr)[index1], (*m_data_ptr)[index2]); 
-        };
+        m_calculator = std::bind(&kmedoids::calculate_distance_using_points, this, std::placeholders::_1, std::placeholders::_2);
     }
     else if (p_type == data_t::DISTANCE_MATRIX) {
-        return [this](const std::size_t index1, const std::size_t index2) {
-          return (*m_data_ptr)[index1][index2];
-        };
+        m_calculator = std::bind(&kmedoids::calculate_distance_using_distance_matrix, this, std::placeholders::_1, std::placeholders::_2);
     }
     else {
-        throw std::invalid_argument("Unknown type data is specified (data type code: '" + std::to_string(static_cast<std::size_t>(p_type)) + "') .");
+        throw std::invalid_argument("Unknown type data is specified (type code: '" + std::to_string(static_cast<std::size_t>(p_type)) + "').");
     }
 }
 

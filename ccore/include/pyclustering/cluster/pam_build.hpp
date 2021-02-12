@@ -152,7 +152,11 @@ private:
 
     void calculate_next_medoids() const;
 
-    pam_build::distance_calculator create_distance_calculator(const data_t p_type) const;
+    double calculate_distance_using_distance_matrix(const std::size_t p_index1, const std::size_t p_index2) const;
+
+    double calculate_distance_using_points(const std::size_t p_index1, const std::size_t p_index2) const;
+
+    void create_distance_calculator(const data_t p_type) const;
 };
 
 

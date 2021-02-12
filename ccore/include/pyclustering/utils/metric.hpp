@@ -52,8 +52,8 @@ double euclidean_distance_square(const TypeContainer & point1, const TypeContain
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
-    for (const auto & dim_point2 : point2) {
-        double difference = (*iter_point1 - dim_point2);
+    for (const auto dim_point2 : point2) {
+        const double difference = (*iter_point1 - dim_point2);
         distance += difference * difference;
 
         ++iter_point1;
