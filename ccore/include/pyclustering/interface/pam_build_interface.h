@@ -13,6 +13,9 @@
 
 #include <pyclustering/definitions.hpp>
 
+#include <boost/python.hpp>
+#include <boost/python/list.hpp>
+
 
 /*
 
@@ -43,3 +46,6 @@ extern "C" DECLARATION pyclustering_package * pam_build_algorithm(const pycluste
                                                                   const std::size_t p_amount,
                                                                   const void * const p_metric,
                                                                   const std::size_t p_data_type);
+
+
+boost::python::list pam_build_algorithm_2(const boost::python::list & p_sample, const std::size_t p_amount, const void * const p_metric, const std::size_t p_data_type);
