@@ -10,6 +10,8 @@
 """
 
 
+import numpy as np
+
 from pyclustering.cluster.encoder import type_encoding
 
 from pyclustering.utils import euclidean_distance
@@ -78,6 +80,7 @@ class rock:
         self.__degree_normalization = 1.0 + 2.0 * ((1.0 - threshold) / (1.0 + threshold))
 
         self.__adjacency_matrix = None
+        self.__links_matrix = None
         self.__create_adjacency_matrix()
 
 
@@ -97,7 +100,9 @@ class rock:
         if self.__ccore is True:
             self.__clusters = wrapper.rock(self.__pointer_data, self.__eps, self.__number_clusters, self.__threshold)
         
-        else:  
+        else:
+            # multiply the adjacency matrix with itself to get the links matrix
+            self.__links_matrix = self.__adjacency_matrix.dot(self.__adjacency_matrix)
             self.__clusters = [[index] for index in range(len(self.__pointer_data))]
             
             while len(self.__clusters) > self.__number_clusters:
@@ -178,7 +183,7 @@ class rock:
         
         for index1 in cluster1:
             for index2 in cluster2:
-                number_links += self.__adjacency_matrix[index1][index2]
+                number_links += self.__links_matrix[index1][index2]
                 
         return number_links
             
@@ -191,13 +196,13 @@ class rock:
         
         size_data = len(self.__pointer_data)
         
-        self.__adjacency_matrix = [[0 for i in range(size_data)] for j in range(size_data)]
+        self.__adjacency_matrix = np.zeros((size_data, size_data))
         for i in range(0, size_data):
             for j in range(i + 1, size_data):
                 distance = euclidean_distance(self.__pointer_data[i], self.__pointer_data[j])
                 if (distance <= self.__eps):
-                    self.__adjacency_matrix[i][j] = 1
-                    self.__adjacency_matrix[j][i] = 1
+                    self.__adjacency_matrix[i,j] = 1
+                    self.__adjacency_matrix[j,i] = 1
         
     
 
@@ -213,9 +218,9 @@ class rock:
         """
         
         number_links = self.__calculate_links(cluster1, cluster2)
-        devider = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization
+        divisor = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization
         
-        return number_links / devider
+        return number_links / divisor
 
 
     def __verify_arguments(self):
