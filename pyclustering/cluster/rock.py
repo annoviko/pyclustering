@@ -78,6 +78,7 @@ class rock:
         self.__verify_arguments()
 
         self.__degree_normalization = 1.0 + 2.0 * ((1.0 - threshold) / (1.0 + threshold))
+        self.__data_type = type(data[0][0])
 
         self.__adjacency_matrix = None
         self.__links_matrix = None
@@ -167,6 +168,21 @@ class rock:
         return cluster_indexes
 
 
+    def __Jaccard_similarity(self, a, b):
+        """!
+        @brief Jaccard similarity of 2 boolean vectors.
+        @details Size of the intersection of a and b, divided by the size of the union of a and b.
+        
+        @param[in] a (list): List or numpy array of booleans.
+        @param[in] b (list): List or numpy array of booleans.
+        
+        @return (float) Jaccard similarity of the 2 boolean vectors.
+        
+        """
+        a, b = np.array(a), np.array(b)
+        return np.sum(a&b)/np.sum(a|b)
+
+
     def __calculate_links(self, cluster1, cluster2):
         """!
         @brief Returns number of link between two clusters. 
@@ -183,7 +199,7 @@ class rock:
         
         for index1 in cluster1:
             for index2 in cluster2:
-                number_links += self.__links_matrix[index1][index2]
+                number_links += self.__links_matrix[index1,index2]
                 
         return number_links
             
@@ -199,7 +215,10 @@ class rock:
         self.__adjacency_matrix = np.zeros((size_data, size_data))
         for i in range(0, size_data):
             for j in range(i + 1, size_data):
-                distance = euclidean_distance(self.__pointer_data[i], self.__pointer_data[j])
+                if self.__data_type == bool:
+                    distance = self.__Jaccard_similarity(self.__pointer_data[i], self.__pointer_data[j])
+                else:
+                    distance = euclidean_distance(self.__pointer_data[i], self.__pointer_data[j])
                 if (distance <= self.__eps):
                     self.__adjacency_matrix[i,j] = 1
                     self.__adjacency_matrix[j,i] = 1
