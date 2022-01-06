@@ -52,7 +52,7 @@ class rock:
        
     """
     
-    def __init__(self, data, eps, number_clusters, threshold=0.5, ccore=True):
+    def __init__(self, data, eps, number_clusters, threshold=0.5, outliers_removal=0.33, ccore=True):
         """!
         @brief Constructor of clustering algorithm ROCK.
         
@@ -60,6 +60,7 @@ class rock:
         @param[in] eps (double): Connectivity radius (similarity threshold), points are neighbors if distance between them is less than connectivity radius.
         @param[in] number_clusters (uint): Defines number of clusters that should be allocated from the input data set.
         @param[in] threshold (double): Value that defines degree of normalization that influences on choice of clusters for merging during processing.
+        @param[in] outliers_removal (double): Proportion of remaining clusters which, when reached, triggers outliers removal (set to 0. for no outliers removal)
         @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
         
         """
@@ -68,6 +69,7 @@ class rock:
         self.__eps = eps
         self.__number_clusters = number_clusters
         self.__threshold = threshold
+        self.__outliers_removal = outliers_removal
         
         self.__clusters = None
         
@@ -105,6 +107,8 @@ class rock:
             # multiply the adjacency matrix with itself to get the links matrix
             self.__links_matrix = self.__adjacency_matrix.dot(self.__adjacency_matrix)
             self.__clusters = [[index] for index in range(len(self.__pointer_data))]
+            outliers_removed = False
+            outliers_removal_threshold = len(self.__clusters) * self.__outliers_removal
             
             while len(self.__clusters) > self.__number_clusters:
                 indexes = self.__find_pair_clusters(self.__clusters)
@@ -114,6 +118,9 @@ class rock:
                     self.__clusters.pop(indexes[1])   # remove merged cluster.
                 else:
                     break  # totally separated clusters have been allocated
+                
+                if not outliers_removed and len(self.__clusters) <= outliers_removal_threshold:
+                    self.__remove_outliers()
         return self
 
     
@@ -240,6 +247,15 @@ class rock:
         divisor = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization
         
         return number_links / divisor
+    
+    
+    def __remove_outliers(self):
+        """
+        @brief Remove clusters of size 1 since they are considered as outliers.
+        """
+        for cluster in self.__clusters:
+            if len(cluster) == 1:
+                self.__clusters.pop(cluster)
 
 
     def __verify_arguments(self):
