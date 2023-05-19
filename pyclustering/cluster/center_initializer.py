@@ -245,7 +245,7 @@ class kmeans_plusplus_initializer:
                 dataset_differences[index_center] = numpy.array(self.__data[centers[index_center]])
 
         with warnings.catch_warnings():
-            numpy.warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')
+            warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')
             shortest_distances = numpy.nanmin(dataset_differences, axis=0)
 
         return shortest_distances
