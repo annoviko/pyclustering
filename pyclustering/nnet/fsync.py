@@ -335,7 +335,7 @@ class fsync_network(network):
         
         """
         
-        z = amplitude.view(numpy.complex);
+        z = amplitude.view(numpy.complex128);
         dzdt = self.__landau_stuart(z, argv) + self.__synchronization_mechanism(z, argv);
         
         return dzdt.view(numpy.float64);
