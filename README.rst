@@ -1,4 +1,18 @@
+Warning - Attention Users
+=========================
+
+**Please be aware that the `pyclustering` library is no longer supported as of 2021 due to personal reasons. There will be no further maintenance, issue addressing, or feature development for this repository.**
+
+**For continued usage, I recommend seeking alternative solutions.**
+
+**Thank you for your understanding.**
+
+
+Build Status
+============
+
 |Build Status Linux MacOS| |Build Status Win| |Coverage Status| |PyPi| |Download Counter| |JOSS|
+
 
 PyClustering
 ============
