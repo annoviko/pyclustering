@@ -9,6 +9,8 @@
 #pragma once
 
 
+#include <limits>
+
 #include <pyclustering/cluster/bsas.hpp>
 #include <pyclustering/cluster/mbsas_data.hpp>
 

@@ -7,6 +7,8 @@
 */
 
 
+#include <limits>
+
 #include <pyclustering/cluster/bsas.hpp>
 
 

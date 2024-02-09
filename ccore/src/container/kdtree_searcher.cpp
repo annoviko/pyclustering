@@ -6,6 +6,8 @@
 
 */
 
+#include <limits>
+
 #include <pyclustering/container/kdtree_searcher.hpp>
 
 #include <pyclustering/utils/metric.hpp>
