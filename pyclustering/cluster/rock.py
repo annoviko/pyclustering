@@ -10,6 +10,8 @@
 """
 
 
+import numpy as np
+
 from pyclustering.cluster.encoder import type_encoding
 
 from pyclustering.utils import euclidean_distance
@@ -50,7 +52,7 @@ class rock:
        
     """
     
-    def __init__(self, data, eps, number_clusters, threshold=0.5, ccore=True):
+    def __init__(self, data, eps, number_clusters, threshold=0.5, outliers_removal=0.33, ccore=True):
         """!
         @brief Constructor of clustering algorithm ROCK.
         
@@ -58,6 +60,7 @@ class rock:
         @param[in] eps (double): Connectivity radius (similarity threshold), points are neighbors if distance between them is less than connectivity radius.
         @param[in] number_clusters (uint): Defines number of clusters that should be allocated from the input data set.
         @param[in] threshold (double): Value that defines degree of normalization that influences on choice of clusters for merging during processing.
+        @param[in] outliers_removal (double): Proportion of remaining clusters which, when reached, triggers outliers removal (set to 0. for no outliers removal)
         @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
         
         """
@@ -66,6 +69,7 @@ class rock:
         self.__eps = eps
         self.__number_clusters = number_clusters
         self.__threshold = threshold
+        self.__outliers_removal = outliers_removal
         
         self.__clusters = None
         
@@ -76,8 +80,10 @@ class rock:
         self.__verify_arguments()
 
         self.__degree_normalization = 1.0 + 2.0 * ((1.0 - threshold) / (1.0 + threshold))
+        self.__data_type = type(data[0][0])
 
         self.__adjacency_matrix = None
+        self.__links_matrix = None
         self.__create_adjacency_matrix()
 
 
@@ -97,8 +103,12 @@ class rock:
         if self.__ccore is True:
             self.__clusters = wrapper.rock(self.__pointer_data, self.__eps, self.__number_clusters, self.__threshold)
         
-        else:  
+        else:
+            # multiply the adjacency matrix with itself to get the links matrix
+            self.__links_matrix = self.__adjacency_matrix.dot(self.__adjacency_matrix)
             self.__clusters = [[index] for index in range(len(self.__pointer_data))]
+            outliers_removed = False
+            outliers_removal_threshold = len(self.__clusters) * self.__outliers_removal
             
             while len(self.__clusters) > self.__number_clusters:
                 indexes = self.__find_pair_clusters(self.__clusters)
@@ -108,6 +118,9 @@ class rock:
                     self.__clusters.pop(indexes[1])   # remove merged cluster.
                 else:
                     break  # totally separated clusters have been allocated
+                
+                if not outliers_removed and len(self.__clusters) <= outliers_removal_threshold:
+                    self.__remove_outliers()
         return self
 
     
@@ -162,6 +175,21 @@ class rock:
         return cluster_indexes
 
 
+    def __Jaccard_similarity(self, a, b):
+        """!
+        @brief Jaccard similarity of 2 boolean vectors.
+        @details Size of the intersection of a and b, divided by the size of the union of a and b.
+        
+        @param[in] a (list): List or numpy array of booleans.
+        @param[in] b (list): List or numpy array of booleans.
+        
+        @return (float) Jaccard similarity of the 2 boolean vectors.
+        
+        """
+        a, b = np.array(a), np.array(b)
+        return np.sum(a&b)/np.sum(a|b)
+
+
     def __calculate_links(self, cluster1, cluster2):
         """!
         @brief Returns number of link between two clusters. 
@@ -178,7 +206,7 @@ class rock:
         
         for index1 in cluster1:
             for index2 in cluster2:
-                number_links += self.__adjacency_matrix[index1][index2]
+                number_links += self.__links_matrix[index1,index2]
                 
         return number_links
             
@@ -191,13 +219,16 @@ class rock:
         
         size_data = len(self.__pointer_data)
         
-        self.__adjacency_matrix = [[0 for i in range(size_data)] for j in range(size_data)]
+        self.__adjacency_matrix = np.zeros((size_data, size_data))
         for i in range(0, size_data):
             for j in range(i + 1, size_data):
-                distance = euclidean_distance(self.__pointer_data[i], self.__pointer_data[j])
+                if self.__data_type == bool:
+                    distance = self.__Jaccard_similarity(self.__pointer_data[i], self.__pointer_data[j])
+                else:
+                    distance = euclidean_distance(self.__pointer_data[i], self.__pointer_data[j])
                 if (distance <= self.__eps):
-                    self.__adjacency_matrix[i][j] = 1
-                    self.__adjacency_matrix[j][i] = 1
+                    self.__adjacency_matrix[i,j] = 1
+                    self.__adjacency_matrix[j,i] = 1
         
     
 
@@ -213,9 +244,18 @@ class rock:
         """
         
         number_links = self.__calculate_links(cluster1, cluster2)
-        devider = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization
+        divisor = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization
         
-        return number_links / devider
+        return number_links / divisor
+    
+    
+    def __remove_outliers(self):
+        """
+        @brief Remove clusters of size 1 since they are considered as outliers.
+        """
+        for cluster in self.__clusters:
+            if len(cluster) == 1:
+                self.__clusters.pop(cluster)
 
 
     def __verify_arguments(self):
