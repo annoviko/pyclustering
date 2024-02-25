@@ -40,20 +40,57 @@ endif
 
 
 # Target flag depending on platform
-ifeq ($(PLATFORM), 32-bit)
-	CFLAG_PLATFORM = -m32
-	LFLAG_PLATFORM = -m32
-else 
-	ifeq ($(PLATFORM), 64-bit)
-		CFLAG_PLATFORM = -m64
-		LFLAG_PLATFORM = -m64
+ifeq ($(OSNAME), macos)
+
+#   Arm case of MacOs
+	ifeq ($(shell uname -m), arm64)
+		CFLAG_PLATFORM = -march=native
+		LFLAG_PLATFORM = -march=native
+	else
+		ifeq ($(PLATFORM), 32-bit)
+			CFLAG_PLATFORM = -m32
+			LFLAG_PLATFORM = -m32
+		else 
+			ifeq ($(PLATFORM), 64-bit)
+				CFLAG_PLATFORM = -m64
+				LFLAG_PLATFORM = -m64
+			else
+				PLATFORM = 64-bit
+				CFLAG_PLATFORM = -m64
+				LFLAG_PLATFORM = -m64
+			endif
+		endif
+	endif
+else
+	ifeq ($(OSNAME), linux)
+#   Arm case of MacOs
+		ifeq ($(shell uname --m), aarch64)
+			CFLAG_PLATFORM = -march=native
+			LFLAG_PLATFORM = -march=native
+		else
+			ifeq ($(PLATFORM), 32-bit)
+				CFLAG_PLATFORM = -m32
+				LFLAG_PLATFORM = -m32
+			else 
+				ifeq ($(PLATFORM), 64-bit)
+					CFLAG_PLATFORM = -m64
+					LFLAG_PLATFORM = -m64
+				else
+					PLATFORM = 64-bit
+					CFLAG_PLATFORM = -m64
+					LFLAG_PLATFORM = -m64
+				endif
+			endif
+		endif
+
 	else
 		PLATFORM = 64-bit
 		CFLAG_PLATFORM = -m64
 		LFLAG_PLATFORM = -m64
+	
 	endif
-endif
 
+endif
 
 # Definitions
 DEFINITION_FLAGS =

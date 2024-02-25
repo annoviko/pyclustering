@@ -18,6 +18,7 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <limits>
 
 
 namespace pyclustering {
