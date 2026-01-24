@@ -23,7 +23,7 @@ class clarans:
     
     """
 
-    def __init__(self, data, number_clusters, numlocal, maxneighbor):
+    def __init__(self, data, number_clusters, numlocal, maxneighbor,seed=None):
         """!
         @brief Constructor of clustering algorithm CLARANS.
         @details The higher the value of maxneighbor, the closer is CLARANS to K-Medoids, and the longer is each search of a local minima.
@@ -39,6 +39,7 @@ class clarans:
         self.__numlocal = numlocal
         self.__maxneighbor = maxneighbor
         self.__number_clusters = number_clusters
+        self.__seed = seed
         
         self.__clusters = []
         self.__current = []
@@ -81,7 +82,8 @@ class clarans:
         
         """
         
-        random.seed()
+        if self.__seed is not None:
+            random.seed(self.__seed)
         
         for _ in range(0, self.__numlocal):
             # set (current) random medoids
